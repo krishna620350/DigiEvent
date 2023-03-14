@@ -1,0 +1,10 @@
+@import url('./Color.css');
+
+footer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-2);
+}
