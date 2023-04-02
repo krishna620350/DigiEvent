@@ -1,4 +1,4 @@
-@import url("./Color.css");
+/* @import url("./Color.css");
 .header{
     background-color: var(--bg-color);
 }
@@ -41,4 +41,97 @@
 } .a-r:hover{
     border: 2px solid var(--main-color-l);
     color: var(--main-color-r);
+} */
+
+.main-content {
+    color: #30e3da;
+    text-align: center;
+    font-size: 10px;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+.create-event {
+    margin-left: 0;
+    text-align: center;
+    width: auto;
+    padding-top: 30px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 80px;
+    border-radius: 40px;
+    color: rgb(255, 255, 255);
+    font-size: 23px;
+
+
+}
+
+.eventContainer {
+    margin-top: 70px;
+
+}
+
+.button1 {
+    margin-top: 50px;
+    padding: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: #fefefe;
+    font-size: 30px;
+    border-radius: 40px;
+    border: 2px solid #fff;
+
+}
+
+.button1:hover {
+    background-color: #30e3da;
+    color: #1d2026;
+    transition: 0.5s;
+    border: none;
+}
+
+.ongoing-events {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    padding: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: #fefefe;
+    font-size: 25px;
+    border-radius: 40px;
+    border: 2px solid #fff;
+
+}
+
+.ongoing-events:hover {
+    background-color: #30e3da;
+    color: #1d2026;
+    transition: 0.5s;
+    border: none;
+}
+
+
+.ongoingContainer {
+    margin-top: 130px;
+}
+
+.ongoing-events {
+    margin-top: 300px;
+}
+
+footer {
+    height: auto;
+    width: auto;
+    margin-top: 7%;
+}
+
+footer p {
+    background-color: rgb(24, 26, 26);
+    color: white;
+    text-align: center;
+    padding: 30px;
+
 }

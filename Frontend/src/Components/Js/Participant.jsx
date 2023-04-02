@@ -54,8 +54,8 @@ function Participant() {
                             {/* {console.log(data[0].Paticipants)} */}
                             {data[0].Paticipants.map((participant, index) => (
                                 <tr key={ index }>
-                                    <td>{participant}</td>
-                                    <td><QRCode value={`${participant}`} size="200"/></td>
+                                    <td>{participant.hexString}</td>
+                                    <td><QRCode value={`${participant.hexString}`} size="200"/></td>
                                 </tr>
                             ))}
                         </tbody>

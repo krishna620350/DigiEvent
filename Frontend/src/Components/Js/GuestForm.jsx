@@ -6,7 +6,8 @@ import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 
-import Header from "./Header";
+// import Header from "./Header";
+import Menu from './Navbar';
 import state from "../../Json/State.json";
 import GuestApi from '../../Apis/GuestApi';
 
@@ -22,7 +23,6 @@ function GuestForm() {
         GuestName: '',
         GuestPhone: '',
         GuestEmail: '',
-        TicketCount: 0,
         GuestAddress: '',
         GuestAddress_1: '',
         City: '',
@@ -40,15 +40,10 @@ function GuestForm() {
     const HandleSubmit = (e) => { 
         e.preventDefault();
         // console.log(formValue);
-        let Count = formValue.TicketCount;
-        const Ticket = []
-        while (Count > 0) {
-            const randomBytes = crypto.getRandomValues(new Uint8Array(12));
-            const hexString = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
-            Ticket.push(hexString)
-            Count--;
-        }
-        formValue.Paticipants = Ticket;
+        const randomBytes = crypto.getRandomValues(new Uint8Array(12));
+        const ticket = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+        formValue.Ticket = ticket;
+        formValue.Status = 0
         // console.log(formValue)
         api.InsertDate(formValue).then(response => {
             if (response.success !== '') {
@@ -76,8 +71,9 @@ function GuestForm() {
 
     return (
         <>
-            <Header />
-        <Container>
+            {/* <Header /> */}
+            <Menu />
+            <Container className='text-white'>
             {data.length > 0 && (
                 <div>
                     <Row>
@@ -110,11 +106,6 @@ function GuestForm() {
                 <Form.Label>Guest Email ID:</Form.Label>
                             <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={ formValue.GuestEmail } onChange={HandleInput} />
             </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridPassword">
-                <Form.Label>Number of Ticket</Form.Label>
-                            <Form.Control type="number" placeholder="Enter Number of Ticket" name="TicketCount" value={formValue.TicketCount} onChange={HandleInput} />
-            </Form.Group>
         </Row>
 
         <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -138,7 +129,7 @@ function GuestForm() {
                     <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput}  ref={selectRef}>
                         <option value=''>Choose...</option>
                     {state.map(state => (
-                        <option key={state.value} value={state.name}>
+                        <option key={state.value} value={state.name} className='text-white'>
                         {state.name}
                         </option>
                     ))}
