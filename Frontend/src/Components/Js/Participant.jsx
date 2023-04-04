@@ -8,7 +8,7 @@ import QRCode from 'qrcode.react';
 
 
 import GuestApi from "../../Apis/GuestApi";
-import Header from "./Header";
+import Menu from "./Navbar";
 
 function Participant() {
 
@@ -33,7 +33,7 @@ function Participant() {
     }, [fetchData]);
     console.log(data);
     return (<>
-        <Header />
+        <Menu />
         <Container>
             {data.length > 0 && (
                 <div>

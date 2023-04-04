@@ -2,6 +2,7 @@ import express from 'express';
 import UserRouter from '../Router/UserRouter.js';
 import EventRouter from '../Router/EventRouter.js';
 import GuestRouter from '../Router/GuestRouter.js';
+import VendorRouter from '../Router/VendorRouter.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
@@ -17,6 +18,7 @@ App.use(cors({
 App.use(UserRouter);
 App.use(EventRouter);
 App.use(GuestRouter);
+App.use(VendorRouter);
 
 App.listen(Port, () => {
     console.log(`Example app listening on port ${Port}`)

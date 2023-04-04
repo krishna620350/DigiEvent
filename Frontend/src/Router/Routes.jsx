@@ -7,6 +7,7 @@ import ResponsiveExample from '../Components/Js/Response';
 import GuestForm from '../Components/Js/GuestForm';
 import EventForm from '../Components/Js/EventForm';
 import Participant from '../Components/Js/Participant';
+import Vendor from '../Components/Js/Vendor';
 
 class Router extends React.Component {
     render() {
@@ -31,6 +32,10 @@ class Router extends React.Component {
                         <Route 
                             path="/Guest/:id"
                             element={<GuestForm />}
+                        />
+                        <Route 
+                            path="/Vendor/:id"
+                            element={<Vendor />}
                         />
                         <Route
                             path="/Response/:id"

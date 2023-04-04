@@ -54,30 +54,38 @@ export default class GuestController{
 
     InsertData = async(req, res) => {
         // console.log(req.body);
+        const result = [];
         try {
-            const id = req.body.id;
-            const document = {
-                GuestName: req.body.GuestName,
-                GuestPhone: req.body.GuestPhone,
-                GuestEmail: req.body.GuestEmail,
-                GuestAddress: req.body.GuestAddress,
-                GuestAddress_1: req.body.GuestAddress_1,
-                City: req.body.City,
-                State: req.body.State,
-                Zip: req.body.Zip,
-                Ticket: req.body.Ticket,
-                Status: req.body.Status
-            }
-            // console.log(Gid)
-            await updateDoc(doc(FireStore, "Event", id), {
-                Guests: arrayUnion(document)
-            })
-                .then(() => {
-                    res.status(200).json({ "success": "success", "message": "guest added" });
+            let i = req.body.length - 1;
+            // console.log(i);
+            while(i >= 0) {
+                const id = req.body[i].id;
+                const document = {
+                    GuestName: req.body[i].GuestName,
+                    GuestPhone: req.body[i].GuestPhone,
+                    GuestEmail: req.body[i].GuestEmail,
+                    GuestAddress: req.body[i].GuestAddress,
+                    GuestAddress_1: req.body[i].GuestAddress_1,
+                    City: req.body[i].City,
+                    State: req.body[i].State,
+                    Zip: req.body[i].Zip,
+                    Ticket: req.body[i].Ticket,
+                    Status: req.body[i].Status
+                }
+                // console.log(i)
+                await updateDoc(doc(FireStore, "Event", id), {
+                    Guests: arrayUnion(document)
                 })
-                .catch(e => res.status(404).json(e));
+                    .then(() => {
+                        result.push({id : req.body[i].Ticket})
+                    })
+                    .catch(e => res.status(404).json(e));
+                i--;
+            }
         } catch (e) { 
             res.status(500).json(e);
+        } finally {
+            res.status(200).json(result);
         }
     };
 }
