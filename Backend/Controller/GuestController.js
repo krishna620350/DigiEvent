@@ -60,13 +60,13 @@ export default class GuestController{
                 GuestName: req.body.GuestName,
                 GuestPhone: req.body.GuestPhone,
                 GuestEmail: req.body.GuestEmail,
-                TicketCount: req.body.TicketCount,
                 GuestAddress: req.body.GuestAddress,
-                GuestAddress_1: req.body.GuestAddress,
+                GuestAddress_1: req.body.GuestAddress_1,
                 City: req.body.City,
                 State: req.body.State,
                 Zip: req.body.Zip,
-                Paticipants: req.body.Paticipants
+                Ticket: req.body.Ticket,
+                Status: req.body.Status
             }
             // console.log(Gid)
             await updateDoc(doc(FireStore, "Event", id), {

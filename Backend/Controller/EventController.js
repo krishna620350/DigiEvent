@@ -15,9 +15,12 @@ export default class EventController{
             const results = [];
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
-                if(doc.id === id) results.push(doc.data());
+                if (doc.id == id) {
+                    results.push(doc.data());
+                    // console.log(doc.id, doc.data());
+                }
             });
-            // console.log(results)
+            // console.log(results);
             res.status(200).json(results);
         }catch(e){
             // console.log(e);

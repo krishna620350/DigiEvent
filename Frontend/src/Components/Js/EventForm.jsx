@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 import EventApi from "../../Apis/EventApi";
 import data from "../../Json/State.json";
-import Header from './Header';
+// import Header from './Header';
+import Menu from './Navbar';
 
 function EventForm() {
     const selectRef = useRef(null);
@@ -51,8 +52,9 @@ function EventForm() {
     }
   return (
     <Container>
-        <Header />
-        <Form method="POST" action="#" onSubmit={ HandleSubmit }>
+          {/* <Navbar /> */}
+          <Menu />
+        <Form method="POST" action="#" onSubmit={ HandleSubmit } className="text-white">
             <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridEmail">
                     <Form.Label>Host Name</Form.Label>
@@ -94,7 +96,7 @@ function EventForm() {
                     <Form.Select name='State' value={formValue.State} onChange={ HandleInput } ref={selectRef}>
                         <option value="" >Choose...</option>
                         {data.map(state => (
-                            <option key={state.value} value={state.name}>
+                            <option key={state.value} value={state.name} className="text-white">
                             {state.name}
                             </option>
                         ))}
