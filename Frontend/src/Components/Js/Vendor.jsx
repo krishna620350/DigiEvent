@@ -46,9 +46,9 @@ function GuestForm() {
         formValue.status = -1
         api.InsertDate(formValue).then(response => {
             console.log(response);
-            if (Array.isArray(response)) {
+            if (response.id !== "") {
                 alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                // navigate(`/Participant/${id}?guest=${formValue.GuestPhone}`);
+                navigate(`/VendorResponse/${id}?Vid=${response.id}`);
             } else {
                 alert("Your Tickets is not booked 😭😭😭😭😭😭")
             }
@@ -99,18 +99,18 @@ function GuestForm() {
                                     <Row className="mb-3">
                                         <Form.Group as={Col} controlId="formGridEmail">
                                             <Form.Label>Vendor Name:</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Your Name" name="GuestName" value={formValue.GuestName} onChange={HandleInput} />
+                                            <Form.Control type="text" placeholder="Enter Your Name" name="VendorName" value={formValue.VendorName} onChange={HandleInput} />
                                         </Form.Group>
 
                                         <Form.Group as={Col} controlId="formGridPassword">
                                             <Form.Label>Vendor Phone Number</Form.Label>
-                                            <Form.Control type="tel" placeholder="Enter Your Phone Number" name="GuestPhone" value={formValue.GuestPhone} onChange={HandleInput} />
+                                            <Form.Control type="tel" placeholder="Enter Your Phone Number" name="VendorPhone" value={formValue.VendorPhone} onChange={HandleInput} />
                                         </Form.Group>
                                     </Row>
                                     <Row className="mb-3">
                                         <Form.Group as={Col} controlId="formGridEmail">
                                             <Form.Label>Vendor Email ID:</Form.Label>
-                                            <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={formValue.GuestEmail} onChange={HandleInput} />
+                                            <Form.Control type="email" placeholder="Enter Your Email" name="VendorEmail" value={formValue.VendorEmail} onChange={HandleInput} />
                                         </Form.Group>
                                         <Form.Group as={Col} controlId="formGridEmail">
                                             <Form.Label>Number of Tickets:</Form.Label>
@@ -120,12 +120,12 @@ function GuestForm() {
 
                                     <Form.Group className="mb-3" controlId="formGridAddress1">
                                         <Form.Label>Address</Form.Label>
-                                        <Form.Control type='text' placeholder="1234 Main St" name="GuestAddress" value={formValue.GuestAddress} onChange={HandleInput} />
+                                        <Form.Control type='text' placeholder="1234 Main St" name="VendorAddress" value={formValue.VendorAddress} onChange={HandleInput} />
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" controlId="formGridAddress2">
                                         <Form.Label>Address 2</Form.Label>
-                                        <Form.Control type='text' placeholder="Apartment, studio, or floor" name="GuestAddress_1" value={formValue.GuestAddress_1} onChange={HandleInput} />
+                                        <Form.Control type='text' placeholder="Apartment, studio, or floor" name="VendorAddress_1" value={formValue.VendorAddress_1} onChange={HandleInput} />
                                     </Form.Group>
 
                                     <Row className="mb-3">

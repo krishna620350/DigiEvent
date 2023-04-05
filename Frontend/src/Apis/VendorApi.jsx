@@ -19,11 +19,11 @@ export default class VendorApi {
         return responseData;
     };
 
-    FetchData = async (id, guest) => {
+    FetchData = async (id, Vid) => {
         // console.log(this.url);
         const data = {
             id: id,
-            guest: guest
+            Vid: Vid
         };
         const response = await fetch(`${this.url}/fetchData`, {
             method: 'POST',

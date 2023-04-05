@@ -28,16 +28,16 @@ export default class VendorController {
     };
 
     FetchData = async (req, res) => {
+        const results = [];
         try {
             const id = req.body.id;
-            const phone = req.body.guest;
-            const results = [];
+            const Vid = req.body.Vid;
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
                 if (doc.id === id) {
                     // console.log(doc.data().Guests.length);
-                    doc.data().Guests.forEach(item => {
-                        if (item.GuestPhone == phone) {
+                    doc.data().Vendors.forEach(item => {
+                        if (item.id === Vid) {
                             results.push(item);
                             // console.log(results.length);
                         }
@@ -45,10 +45,11 @@ export default class VendorController {
                 }
             });
             // console.log(results)
-            res.status(200).json(results);
         } catch (e) {
             // console.log(e);
             res.status(404).json(e);
+        } finally {
+            res.status(200).json(results);
         }
     };
 
@@ -58,9 +59,37 @@ export default class VendorController {
         return hexString;
     };
 
+    FindRecordAndUpdate = async (id, VID, result) => {
+        // console.log(result, id, VID);
+       const querySnapshot = await getDocs(collection(FireStore, "Event"));
+       querySnapshot.forEach(async (doc) => {
+           if (doc.id === id) {
+               const vendors = doc.data().Vendors;
+            //    console.log(vendors);
+               const vendorIndex = vendors.findIndex((vendor) => vendor.id === VID);
+            //    console.log(vendorIndex);
+               if (vendorIndex === -1) {
+                   throw new Error(`Vendor with ID ${VID} does not exist in event with ID ${id}.`);
+               }
+               const updatedVendor = { ...vendors[vendorIndex], GID: result };
+            //    console.log(updatedVendor);
+               const updatedVendors = [
+                   ...vendors.slice(0, vendorIndex),
+                   updatedVendor,
+                   ...vendors.slice(vendorIndex + 1),
+               ];
+            //    console.log(updatedVendor);
+
+               await updateDoc(doc.ref, { Vendors: updatedVendors });
+           }
+       });
+    };
+
+
     InsertData = async (req, res) => {
         // console.log(req.body);
         const result = [];
+        let response = '';
         try {
             const VID = this.UniqueID();
             const id = req.body.id;
@@ -70,16 +99,15 @@ export default class VendorController {
                 VendorPhone: req.body.VendorPhone,
                 VendorEmail: req.body.VendorEmail,
                 VendorAddress: req.body.VendorAddress,
-                VendorAddress_1: req.body.VendorAddress,
+                VendorAddress_1: req.body.VendorAddress_1,
                 City: req.body.City,
                 State: req.body.State,
                 Zip: req.body.Zip,
-                TicketCount: req.body.TicketCount
+                TicketCount: req.body.TicketCount,
             }
             await updateDoc(doc(FireStore, "Event", id), {
                 Vendors: arrayUnion(vendorDocuments)
             }).then(async () => {
-                result.push(VID)
                 let i = req.body.TicketCount;
                 // console.log(i);
                 while (i > 0) {
@@ -103,14 +131,18 @@ export default class VendorController {
                     }).then((response) => {
                         result.push({ id: TID})
                     }).catch(e => res.status(404).json(e));
-
                     i--;
                 }
+                // console.log(result);
+                await this.FindRecordAndUpdate(id, VID, result).then(() => {
+                    response = VID;
+                    // console.log(response);
+                });
             })
         } catch (e) {
             res.status(500).json(e);
         } finally {
-            res.status(200).json(result);
+            res.status(200).json({id: response});
         }
     };
 }
