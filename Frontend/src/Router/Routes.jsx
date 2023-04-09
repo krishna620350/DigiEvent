@@ -7,6 +7,9 @@ import ResponsiveExample from '../Components/Js/Response';
 import GuestForm from '../Components/Js/GuestForm';
 import EventForm from '../Components/Js/EventForm';
 import Participant from '../Components/Js/Participant';
+import Vendor from '../Components/Js/Vendor';
+import VendorResponse from '../Components/Js/VendorResponse';
+import UpdateGuest from '../Components/Js/UpdateGuest';
 
 class Router extends React.Component {
     render() {
@@ -32,6 +35,10 @@ class Router extends React.Component {
                             path="/Guest/:id"
                             element={<GuestForm />}
                         />
+                        <Route 
+                            path="/Vendor/:id"
+                            element={<Vendor />}
+                        />
                         <Route
                             path="/Response/:id"
                             element={<ResponsiveExample />}
@@ -39,6 +46,14 @@ class Router extends React.Component {
                         <Route
                             path="/Participant/:id"
                             element={<Participant />}
+                        />
+                        <Route
+                            path="/VendorResponse/:id"
+                            element={<VendorResponse />}
+                         />
+                         <Route
+                            path="/UpdateGuest/:id"
+                            element={<UpdateGuest />}
                          />
                     </Routes>
                 </BrowserRouter>

@@ -2,11 +2,13 @@ import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link, useParams } from "react-router-dom";
 import QRCode from 'qrcode.react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useRef } from "react";
 import URL from '../../Json/Url.json'
 
 
@@ -20,6 +22,7 @@ function ResponsiveExample() {
   const [data, setData] = useState([]);
   const [pageSize] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
+  const qrCodeRef = useRef(null);
 
   const api = useMemo(() => new EventApi(), []);
 
@@ -62,14 +65,38 @@ function ResponsiveExample() {
 
       pdf.save("guest-list.pdf");
     });
+
   }
+
+  const downloadQR = () => {
+    const input = qrCodeRef.current;
+    html2canvas(input, {scale: 2, backgroundColor: "transparent"})
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = 150;
+        const pdfWidth = 150;
+        const pdfHeight = (imgProps * pdfWidth) / imgProps;
+        const x = (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
+        const y = (pdf.internal.pageSize.getHeight() - pdfHeight) / 2;
+        pdf.setDrawColor(0);
+        pdf.setFillColor(0, 255, 0);
+        pdf.roundedRect(x - 5, y - 5, pdfWidth + 10, pdfHeight + 10, 3, 3, 'FD');
+        pdf.addImage(imgData, 'PNG', x, y, pdfWidth, pdfHeight);
+        pdf.save('qrcode.pdf');
+      })
+      .catch((error) => {
+        console.log('Error generating PDF:', error);
+      });
+  };
 
   return (<>
     {/* <Header /> */}
     <Menu />
     <Container className='text-white'>
       {data.length > 0 && (
-        <div>
+        <>
+        <span>
           <Row>
             <Col><b>Event Name:</b> {data[0].EventName}</Col>
             <Col><b>Host Name:</b> {data[0].HostName}</Col>
@@ -79,12 +106,36 @@ function ResponsiveExample() {
             <Col><b>End Date:</b> {data[0].EndDate}</Col>
           </Row>
           <Row>
-            <Col><b>Host Contact:</b> {`${data[0].HostEmail} | ${data[0].HostPhone} | ${data[0].EventAddress} ${data[0].EventAddress_1}`}</Col>
-            <Col><b>Guest Link:</b>
-              <span> <Link to={`/Guest/${id}`}> {`${URL.URL}`}/Guest/{id}</Link></span>
-              <QRCode value={`${URL.URL}/Guest/${id}`} size={256} />
+              <Col>
+                <Row xs={2} md={4} lg={5}>
+                  <Col><b>Host Contact:</b></Col>
+                  <Col> <span style={{ whiteSpace: 'pre-line' }}>
+                    {`${data[0].HostEmail} \n ${data[0].HostPhone}\n${data[0].EventAddress} ${data[0].EventAddress_1}`}
+                  </span>
+                  </Col>
+                </Row>
+              </Col>
+            <Col>
+              <Row>
+                  <Col><Link to={`/Guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
+                  <Col><Link to={`/Vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
+              </Row>
             </Col>
-          </Row>
+            </Row>
+          </span>
+          <span className='text-center'>
+            <Col>
+              <div style={{ position: 'absolute', left: -10000, backgroundColor: 'white' }} ref={qrCodeRef}>
+                <QRCode value={`${URL.URL}/Guest/${id}`} size={256} />
+              </div>
+              <div>
+                <QRCode value={`${URL.URL}/Guest/${id}`} size={256} />
+              </div>
+              <div>
+                <Button variant="success" onClick={ downloadQR }>Download QR code</Button>
+              </div>
+            </Col>
+          </span>
           <div id="pdftable" style={{ position: 'absolute', left: -10000 }}>
             <Table responsive striped bordered hover variant="dark">
               <thead>
@@ -112,7 +163,7 @@ function ResponsiveExample() {
             </Table>
           </div>
           <div className="d-flex justify-content-center">
-            <button className="btn btn-primary" onClick={() => downloadPDF()} style={{marginBottom: 10, marginTop: 20}}>Download PDF</button>
+            <button className="btn btn-primary" onClick={() => downloadPDF()} style={{marginBottom: 10, marginTop: 20}}>Download Guest List</button>
           </div>
             <Table responsive striped bordered hover variant="dark">
               <thead>
@@ -142,7 +193,8 @@ function ResponsiveExample() {
             <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className='text-white'>Prev</button>
             <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(data[0].Guests.length / pageSize)} className='text-white'>Next</button>
           </div>
-        </div>
+          
+        </>
       )}
     </Container>
   </>
