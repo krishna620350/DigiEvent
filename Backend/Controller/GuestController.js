@@ -88,4 +88,47 @@ export default class GuestController{
             res.status(200).json(result);
         }
     };
+
+    UpdateData = async (req, res) => {
+        // console.log(req.body);
+        const { id, Vid, TicketId } = req.body;
+        try {
+            const { GuestName, GuestPhone, GuestEmail, GuestAddress, GuestAddress_1, City, State, Zip } = req.body;
+            const querySnapshot = await getDocs(collection(FireStore, "Event"));
+            for (const doc of querySnapshot.docs) {
+                if (doc.id === id) {
+                    const guests = doc.data().Guests;
+                    const guestIndex = guests.findIndex(guest => guest.Ticket === TicketId && guest.VendorId === Vid);
+                    if (guestIndex === -1) {
+                        throw new Error(`Guest with Ticket ID ${TicketId} and/or Vendor ID ${Vid} does not exist in event with ID ${id}.`);
+                    }
+                    // console.log(guestIndex);
+                    const updatedGuest = {
+                        ...guests[guestIndex],
+                        GuestName: GuestName !== "" ? GuestName : guests[guestIndex].GuestName,
+                        GuestPhone: GuestPhone !== "" ? GuestPhone : guests[guestIndex].GuestPhone,
+                        GuestEmail: GuestEmail !== "" ? GuestEmail : guests[guestIndex].GuestEmail,
+                        GuestAddress: GuestAddress !== "" ? GuestAddress : guests[guestIndex].GuestAddress,
+                        GuestAddress_1: GuestAddress_1 !== "" ? GuestAddress_1 : guests[guestIndex].GuestAddress_1,
+                        City: City !== "" ? City : guests[guestIndex].City,
+                        State: State !== "" ? State : guests[guestIndex].State,
+                        Zip: Zip !== "" ? Zip : guests[guestIndex].Zip,
+                        Status: 0,
+                    };
+                    // console.log(updatedGuest)
+                    const updatedGuests = [
+                        ...guests.slice(0, guestIndex),
+                        updatedGuest,
+                        ...guests.slice(guestIndex + 1),
+                    ];
+                    // console.log(updatedGuests)
+                    await updateDoc(doc.ref, { Guests: updatedGuests });
+                }
+            }
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+        } finally {
+            res.status(200).json({ id: Vid });
+        }
+    };
 }

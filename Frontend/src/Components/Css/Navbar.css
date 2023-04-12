@@ -1,3 +1,4 @@
+@import url("./Color.css");
 nav {
     display: flex;
     align-items: center;
@@ -35,7 +36,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: aliceblue;
+    color: var(--bg-color);
     padding: 10px 15px;
     border-radius: 50px;
     transition: .2s;

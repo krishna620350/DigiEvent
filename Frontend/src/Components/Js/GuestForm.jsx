@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 
-// import Header from "./Header";
+import Footer from './Footer'
 import Menu from './Navbar';
 import state from "../../Json/State.json";
 import GuestApi from '../../Apis/GuestApi';
@@ -38,7 +38,7 @@ function GuestForm() {
         setFormValue(data);
         // const { name, value } = e.target;
         // setFormValue({ ...formValue, [name]: value });
-        // console.log(formValue);
+        console.log(formValue);
     }
 
     const addGuest = () => {
@@ -103,7 +103,7 @@ function GuestForm() {
         <>
             {/* <Header /> */}
             <Menu />
-            <Container className='text-white'>
+            <Container className='text-white mb-5'>
                 {data.length > 0 && (
                     <div>
                         <Row>
@@ -178,9 +178,9 @@ function GuestForm() {
                                 </Row>
                     </Card.Body>
                                 </Card>
-                                <Button variant="danger" className='mt-2' onClick={() => removeGuest(index)}>
+                                {formValue.length > 1 && <Button variant="danger" className='mt-2' onClick={() => removeGuest(index)}>
                                     Remove Guest
-                                </Button>
+                                </Button>}
                             </div>
                         )
                     })}
@@ -194,6 +194,7 @@ function GuestForm() {
                 </div>
             </Form>
             </Container>
+            <Footer />
         </>
     );
 }

@@ -5,7 +5,7 @@ import {
     doc,
     updateDoc,
     deleteDoc,
-    arrayUnion
+    arrayUnion,
 } from "firebase/firestore";
 import FireStore from "../Config/Connection.js";
 import crypto from "crypto";
@@ -29,21 +29,29 @@ export default class VendorController {
 
     FetchData = async (req, res) => {
         const results = [];
+        const guest = [];
         try {
             const id = req.body.id;
             const Vid = req.body.Vid;
-            const querySnapshot = await getDocs(collection(FireStore, "Event"));
-            querySnapshot.forEach((doc) => {
+            const query1 = await getDocs(collection(FireStore, "Event"));
+            const query2 = await getDocs(collection(FireStore, "Vendors"));
+            query1.forEach((doc) => {
                 if (doc.id === id) {
                     // console.log(doc.data().Guests.length);
                     doc.data().Vendors.forEach(item => {
-                        if (item.id === Vid) {
-                            results.push(item);
-                            // console.log(results.length);
+                        if (item.Vid === Vid) {
+                            query2.forEach((docitem) => {
+                                results.push(docitem.data());
+                                // console.log(results);
+                            })
+                            item.GuestId.forEach(guestid => guest.push(guestid));
+                            // results.push(item.GuestId);
+                            
                         }
                     })
                 }
             });
+            results.push({ GID: guest });
             // console.log(results)
         } catch (e) {
             // console.log(e);
@@ -66,12 +74,12 @@ export default class VendorController {
            if (doc.id === id) {
                const vendors = doc.data().Vendors;
             //    console.log(vendors);
-               const vendorIndex = vendors.findIndex((vendor) => vendor.id === VID);
+               const vendorIndex = vendors.findIndex((vendor) => vendor.Vid === VID);
             //    console.log(vendorIndex);
                if (vendorIndex === -1) {
                    throw new Error(`Vendor with ID ${VID} does not exist in event with ID ${id}.`);
                }
-               const updatedVendor = { ...vendors[vendorIndex], GID: result };
+               const updatedVendor = { ...vendors[vendorIndex], GuestId: result };
             //    console.log(updatedVendor);
                const updatedVendors = [
                    ...vendors.slice(0, vendorIndex),
@@ -91,10 +99,8 @@ export default class VendorController {
         const result = [];
         let response = '';
         try {
-            const VID = this.UniqueID();
             const id = req.body.id;
             const vendorDocuments = {
-                id: VID,
                 VendorName: req.body.VendorName,
                 VendorPhone: req.body.VendorPhone,
                 VendorEmail: req.body.VendorEmail,
@@ -105,15 +111,17 @@ export default class VendorController {
                 Zip: req.body.Zip,
                 TicketCount: req.body.TicketCount,
             }
+            const docRef = await addDoc(collection(FireStore, "Vendors"), vendorDocuments);
+            const Vid = docRef.id;
             await updateDoc(doc(FireStore, "Event", id), {
-                Vendors: arrayUnion(vendorDocuments)
+                Vendors: arrayUnion({Vid: Vid, GuestId:[]})
             }).then(async () => {
                 let i = req.body.TicketCount;
                 // console.log(i);
                 while (i > 0) {
                     const TID = this.UniqueID();
                     const document = {
-                        VendorId: VID,
+                        VendorId: Vid,
                         GuestName: "",
                         GuestPhone: "",
                         GuestEmail: "",
@@ -134,8 +142,8 @@ export default class VendorController {
                     i--;
                 }
                 // console.log(result);
-                await this.FindRecordAndUpdate(id, VID, result).then(() => {
-                    response = VID;
+                await this.FindRecordAndUpdate(id, Vid, result).then(() => {
+                    response = Vid;
                     // console.log(response);
                 });
             })
@@ -145,4 +153,5 @@ export default class VendorController {
             res.status(200).json({id: response});
         }
     };
+
 }
