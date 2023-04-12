@@ -97,3 +97,7 @@ nav .toggle-btn {
     font-family: 'Quicksand', sans-serif;
 
 }
+
+.login{
+    cursor: pointer;
+}
