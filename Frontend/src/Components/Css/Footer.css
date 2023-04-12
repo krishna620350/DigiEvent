@@ -1,10 +1,13 @@
-@import url('./Color.css');
-
-footer{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+@import url("./Color.css");
+footer {
+    background-color: var(--main-color-l);
+    height: auto;
     width: 100%;
-    background-color: var(--bg-color);
-    color: var(--text-2);
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+}
+
+footer p {
+    text-align: center;
 }

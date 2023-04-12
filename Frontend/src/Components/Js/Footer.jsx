@@ -3,9 +3,11 @@ import '../Css/Footer.css'
 
 class Footer extends React.Component {
     render() {
-        return <footer>
-            &#169; All Rights are Regivered By TCS
+        return (
+            <footer>
+                <p>Copyright &copy;2023 Tata Consultancy Services.</p>
             </footer>
+        )
     }
 }
 

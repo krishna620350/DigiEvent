@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 
-// import Header from "./Header";
+import Footer from './Footer';
 import Menu from './Navbar';
 import state from "../../Json/State.json";
 import VendorApi from '../../Apis/VendorApi';
@@ -72,7 +72,7 @@ function GuestForm() {
         <>
             {/* <Header /> */}
             <Menu />
-            <Container className='text-white'>
+            <Container className='mb-5'>
                 <h2 className='text-center mb-1 text-danger'>
                     Vendor <Badge bg="secondary">Form</Badge>
                 </h2>
@@ -164,6 +164,7 @@ function GuestForm() {
                     </div>
                 )}
             </Container>
+            <Footer />
         </>
                 
     );

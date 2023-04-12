@@ -13,14 +13,14 @@ import URL from '../../Json/Url.json'
 
 
 import EventApi from "../../Apis/EventApi";
-// import Header from "./Header";
+import Footer from './Footer';
 import Menu from "./Navbar";
 
 function ResponsiveExample() {
 
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [pageSize] = useState(2);
+  const [pageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const qrCodeRef = useRef(null);
 
@@ -93,36 +93,40 @@ function ResponsiveExample() {
   return (<>
     {/* <Header /> */}
     <Menu />
-    <Container className='text-white'>
+    <Container className='mb-5'>
       {data.length > 0 && (
         <>
-        <span>
-          <Row>
-            <Col><b>Event Name:</b> {data[0].EventName}</Col>
-            <Col><b>Host Name:</b> {data[0].HostName}</Col>
-          </Row>
-          <Row>
-            <Col><b>Start Date:</b> {data[0].StartDate}</Col>
-            <Col><b>End Date:</b> {data[0].EndDate}</Col>
-          </Row>
-          <Row>
-              <Col>
-                <Row xs={2} md={4} lg={5}>
-                  <Col><b>Host Contact:</b></Col>
-                  <Col> <span style={{ whiteSpace: 'pre-line' }}>
-                    {`${data[0].HostEmail} \n ${data[0].HostPhone}\n${data[0].EventAddress} ${data[0].EventAddress_1}`}
-                  </span>
-                  </Col>
-                </Row>
-              </Col>
-            <Col>
+          <p class="h1">Event Response</p><hr />
+          <p class="h5">Event Details</p>
+          <div className='border border-3 border-secondary rounded p-3 mb-3'>
+            <span>
               <Row>
-                  <Col><Link to={`/Guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
-                  <Col><Link to={`/Vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
+                <Col><b>Event Name:</b> {data[0].EventName}</Col>
+                <Col><b>Host Name:</b> {data[0].HostName}</Col>
               </Row>
-            </Col>
-            </Row>
-          </span>
+              <Row>
+                <Col><b>Start Date:</b> {data[0].StartDate}</Col>
+                <Col><b>End Date:</b> {data[0].EndDate}</Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Row xs={2} md={4} lg={5}>
+                    <Col><b>Host Contact:</b></Col>
+                    <Col> <span style={{ whiteSpace: 'pre-line' }}>
+                      {`${data[0].HostEmail} \n ${data[0].HostPhone}\n${data[0].EventAddress} ${data[0].EventAddress_1}`}
+                    </span>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <Row>
+                    <Col><Link to={`/Guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
+                    <Col><Link to={`/Vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
+                  </Row>
+                </Col>
+              </Row>
+            </span>
+          </div>
           <span className='text-center'>
             <Col>
               <div style={{ position: 'absolute', left: -10000, backgroundColor: 'white' }} ref={qrCodeRef}>
@@ -132,7 +136,7 @@ function ResponsiveExample() {
                 <QRCode value={`${URL.URL}/Guest/${id}`} size={256} />
               </div>
               <div>
-                <Button variant="success" onClick={ downloadQR }>Download QR code</Button>
+                <Button variant="success" onClick={downloadQR}>Download QR code</Button>
               </div>
             </Col>
           </span>
@@ -165,7 +169,8 @@ function ResponsiveExample() {
           <div className="d-flex justify-content-center">
             <button className="btn btn-primary" onClick={() => downloadPDF()} style={{marginBottom: 10, marginTop: 20}}>Download Guest List</button>
           </div>
-            <Table responsive striped bordered hover variant="dark">
+          <p class="h5">All Guest Details</p>
+            <Table responsive striped bordered hover variant="light">
               <thead>
                 <tr>
                   <th>S.No</th>
@@ -177,9 +182,12 @@ function ResponsiveExample() {
                 </tr>
               </thead>
               <tbody>
-                {data[0].Guests.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((guest, index) => (
+              {data[0].Guests
+                .filter(guest => guest.Status === 0) // filter by status
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                .map((guest, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>{(currentPage - 1) * pageSize + index + 1}</td>
                     <td>{guest.Ticket}</td>
                     <td>{guest.GuestName}</td>
                     <td>{guest.GuestEmail}</td>
@@ -190,13 +198,14 @@ function ResponsiveExample() {
               </tbody>
             </Table>
           <div>
-            <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className='text-white'>Prev</button>
-            <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(data[0].Guests.length / pageSize)} className='text-white'>Next</button>
+            <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className='text-black' >Prev</button>
+            <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(data[0].Guests.length / pageSize)} className='text-black'>Next</button>
           </div>
           
         </>
       )}
     </Container>
+    <Footer />
   </>
   );
 }

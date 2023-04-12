@@ -12,6 +12,4 @@ VendorRouter.post(`${url}+/addData`, Controller.InsertData);
 
 VendorRouter.post(`${url}+/fetchData`, Controller.FetchData);
 
-// EventRouter.delete(`${url}+/deleteData`, Controller.DeleteData);
-
 export default VendorRouter;
