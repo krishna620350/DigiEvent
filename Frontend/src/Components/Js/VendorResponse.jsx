@@ -57,10 +57,10 @@ function VendorResponse() {
     return (<>
         <Menu />
         <Container className='mb-5'>
-            <p class="h1">Vendor Response</p><hr />
+            <p className="h1">Vendor Response</p><hr />
             {data.length > 0 && (
                 <div>
-                    <p class="h5">Vendor Details</p>
+                    <p className="h5">Vendor Details</p>
                     <div className="border border-3 border-secondary rounded p-3 mb-3">
                     <Row>
                         <Col><b>Vendor Name:</b> { data[0].VendorName }</Col>
@@ -69,7 +69,7 @@ function VendorResponse() {
                         <Col><b>Vendor Contact:</b> {`${ data[0].VendorEmail } | ${ data[0].VendorPhone } | ${ data[0].VendorAddress } ${ data[0].VendorAddress_1 }`}</Col>
                     </Row>
                     </div>
-                    <p class="h5">Ticket Details</p>
+                    <p className="h5">Ticket Details</p>
                     <Table responsive className="text-center table-light border border-dark">
                         <thead>
                             <tr>

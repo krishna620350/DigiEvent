@@ -164,7 +164,7 @@ function GuestForm() {
                                         <Form.Select type='text' name="State" value={input.State} onChange={event => HandleInput(index, event)} ref={selectRef}>
                                         <option value=''>Choose...</option>
                                         {state.map(state => (
-                                            <option key={state.value} value={state.name} className='text-white'>
+                                            <option key={state.value} value={state.name}>
                                                 {state.name}
                                             </option>
                                         ))}

@@ -1,4 +1,5 @@
 import URL from "../Json/Url.json";
+
 export default class GuestApi {
     url = `${URL.APIURL}/guest`;
     
@@ -19,11 +20,12 @@ export default class GuestApi {
         return responseData;
     };
 
-    FetchData = async (id, guest) => {
-        // console.log(this.url);
+    FetchData = async (id, Vid, TicketId) => {
+        // console.log(this.url, id, Vid, TicketId);
         const data = {
             id: id,
-            guest: guest
+            Vid: Vid,
+            TicketId: TicketId
         };
         const response = await fetch(`${this.url}/fetchData`, {
             method: 'POST',

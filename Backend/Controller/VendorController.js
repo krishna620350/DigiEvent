@@ -15,10 +15,20 @@ export default class VendorController {
         try {
             const id = req.body.id;
             const results = [];
-            const querySnapshot = await getDocs(collection(FireStore, "Event"));
-            querySnapshot.forEach((doc) => {
-                if (doc.id === id) results.push(doc.data());
-            });
+            if (id === 'vendor') {
+                const querySnapshot = await getDocs(collection(FireStore, "Vendors"));
+                querySnapshot.forEach((doc) => {
+                    results.push({
+                        id: doc.id,
+                        name: doc.data().VendorName
+                    });
+                });
+            } else {
+                const querySnapshot = await getDocs(collection(FireStore, "Event"));
+                querySnapshot.forEach((doc) => {
+                    if (doc.id === id) results.push(doc.data());
+                });
+            }
             // console.log(results)
             res.status(200).json(results);
         } catch (e) {
@@ -154,4 +164,50 @@ export default class VendorController {
         }
     };
 
+    UpdateData = async (req, res) => { 
+        const result = [];
+        let response = '';
+        try {
+            const id = req.body.id;
+            const Vid = req.body.VendorName;
+            await updateDoc(doc(FireStore, "Event", id), {
+                Vendors: arrayUnion({ Vid: Vid, GuestId: [] })
+            }).then(async () => {
+                let i = req.body.TicketCount;
+                // console.log(i);
+                while (i > 0) {
+                    const TID = this.UniqueID();
+                    const document = {
+                        VendorId: Vid,
+                        GuestName: "",
+                        GuestPhone: "",
+                        GuestEmail: "",
+                        GuestAddress: "",
+                        GuestAddress_1: "",
+                        City: "",
+                        State: "",
+                        Zip: "",
+                        Ticket: TID,
+                        Status: -1
+                    }
+                    // console.log(i)
+                    await updateDoc(doc(FireStore, "Event", id), {
+                        Guests: arrayUnion(document),
+                    }).then((response) => {
+                        result.push({ id: TID })
+                    }).catch(e => res.status(404).json(e));
+                    i--;
+                }
+                // console.log(result);
+                await this.FindRecordAndUpdate(id, Vid, result).then(() => {
+                    response = Vid;
+                    // console.log(response);
+                });
+            })
+        } catch (e) {
+            res.status(500).json(e);
+        } finally {
+            res.status(200).json({ id: response });
+        }
+    }
 }

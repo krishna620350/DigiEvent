@@ -30,14 +30,15 @@ export default class GuestController{
     FetchData = async (req, res) => {
         try {
             const id = req.body.id;
-            const phone = req.body.guest;
+            const TicketId = req.body.TicketId;
+            const Vid = req.body.Vid;
             const results = [];
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
                 if (doc.id === id) {
                     // console.log(doc.data().Guests.length);
                     doc.data().Guests.forEach(item => {
-                        if (item.GuestPhone == phone) { 
+                        if (item.Ticket === TicketId && item.VendorId === Vid) { 
                             results.push(item);
                             // console.log(results.length);
                         }
@@ -128,7 +129,7 @@ export default class GuestController{
         } catch (e) {
             res.status(500).json({ message: e.message });
         } finally {
-            res.status(200).json({ id: Vid });
+            res.status(200).json({ id: Vid, TicketId: TicketId });
         }
     };
 }

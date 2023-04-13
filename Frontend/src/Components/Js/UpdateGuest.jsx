@@ -7,15 +7,11 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import jsPDF from 'jspdf';
-import QRCode from 'qrcode.react';
 
 // import Header from "./Header";
 import Menu from './Navbar';
 import state from "../../Json/State.json";
-import URL from "../../Json/Url.json";
 import GuestApi from '../../Apis/GuestApi';
-import html2canvas from 'html2canvas';
 
 function GuestForm() {
     const [data, setData] = useState([]);
@@ -56,21 +52,7 @@ function GuestForm() {
         api.UpdateData(formValue).then(response => {
             if (response.id !== "") {
                 alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏");
-
-                const card = document.querySelector("#card");
-
-                html2canvas(card).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jsPDF({
-                        orientation: "portrait",
-                        unit: "mm",
-                        format: "a4"
-                    });
-                    pdf.addImage(imgData, 'PNG', 10, 10, 150, 150);
-                    // pdf.text(`Response: ${JSON.stringify(response)}`, 10, 70);
-                    pdf.save(`${formValue.GuestName}_${TicketId}.pdf`);
-                });
-                navigate(`/VendorResponse/${id}?Vid=${response.id}`);
+                navigate(`/Guest/${id}?Vid=${response.id}&ticketid=${response.TicketId}`);
             } else {
                 alert("Your Tickets is not booked 😭😭😭😭😭😭")
             }
@@ -157,7 +139,7 @@ function GuestForm() {
                                             <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput} ref={selectRef}>
                                                 <option value=''>Choose...</option>
                                                 {state.map(state => (
-                                                    <option key={state.value} value={state.name} className='text-white'>
+                                                    <option key={state.value} value={state.name}>
                                                         {state.name}
                                                     </option>
                                                 ))}
@@ -180,21 +162,6 @@ function GuestForm() {
                         
                     </div>
                 )}
-                <div className="card align-items-center" style={{ position: 'absolute', left: -10000 }} id='card'>
-                    <div className='' style={{ backgroundColor: 'white' }}>
-                        <QRCode value={`${URL.URL}/Scanner/${id}?ticketid=${TicketId}`} size="200" />
-                    </div>
-                    <div className="card-body" style={{ backgroundColor: 'white' }}>
-                        <h5 className="card-title">{ data.EventName }</h5>
-                        <ul className="list-group">
-                            <li className="list-group-item"><b style={{backgroundColor: 'white'}}>Guest Name : </b>{ formValue.GuestName }</li>
-                            <li className="list-group-item"><b style={{ backgroundColor: 'white' }}>Guest Email or Phone Number: </b>{formValue.GuestEmail} | { formValue.GuestPhone }</li>
-                            <li className="list-group-item"><b style={{ backgroundColor: 'white' }}>Guest Ticket Id: </b>{TicketId}</li>
-                            <li className="list-group-item"><b style={{ backgroundColor: 'white' }}>Vendor Id: </b>{Vid}</li>
-                            <li className="list-group-item"><b style={{ backgroundColor: 'white' }}>Event Id: </b>{id}</li>
-                        </ul>
-                    </div>
-                </div>
             </Container>
         </>
 

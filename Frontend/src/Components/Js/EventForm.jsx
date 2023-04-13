@@ -100,7 +100,7 @@ function EventForm() {
                                 <Form.Select name='State' value={formValue.State} onChange={HandleInput} ref={selectRef}>
                                     <option value="" >Choose...</option>
                                     {data.map(state => (
-                                        <option key={state.value} value={state.name} className="text-white">
+                                        <option key={state.value} value={state.name}>
                                             {state.name}
                                         </option>
                                     ))}

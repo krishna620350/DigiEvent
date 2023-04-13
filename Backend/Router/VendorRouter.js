@@ -12,4 +12,6 @@ VendorRouter.post(`${url}+/addData`, Controller.InsertData);
 
 VendorRouter.post(`${url}+/fetchData`, Controller.FetchData);
 
+VendorRouter.put(`${url}+/updateData`, Controller.UpdateData);
+
 export default VendorRouter;

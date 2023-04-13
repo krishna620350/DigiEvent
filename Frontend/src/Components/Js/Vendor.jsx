@@ -20,6 +20,28 @@ function GuestForm() {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [formVisible, setFormVisible] = useState(false);
+    const [selectVisible, setSelectVisible] = useState(false);
+    const [vendor, setVendor] = useState([]);
+
+    const api = useMemo(() => new VendorApi(), []);
+
+    const handleButtonForm = () => {
+        setSelectVisible(false);
+        setFormVisible(true);
+    }
+
+    const handleButtonSelection = () => { 
+        setSelectVisible(true);
+        setFormVisible(false);
+        api.ReadData('vendor').then((response) => { 
+            setVendor(response);
+        });
+    }
+
+    useEffect(() => {
+        
+    }, [vendor]);
     const [formValue, setFormValue] = useState({
         id: id,
         VendorName: '',
@@ -32,7 +54,6 @@ function GuestForm() {
         State: '',
         Zip: ''
     });
-    const api = useMemo(() => new VendorApi(), []);
 
     const HandleInput = (e) => {
         const { name, value } = e.target;
@@ -42,17 +63,30 @@ function GuestForm() {
 
     const HandleSubmit = (e) => {
         e.preventDefault();
-        // console.log(formValue);
         formValue.status = -1
-        api.InsertDate(formValue).then(response => {
-            console.log(response);
-            if (response.id !== "") {
-                alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                navigate(`/VendorResponse/${id}?Vid=${response.id}`);
-            } else {
-                alert("Your Tickets is not booked 😭😭😭😭😭😭")
-            }
-        });
+        if (formValue.VendorEmail === '' && formValue.VendorPhone === '') {
+            api.UpdateData(formValue).then(response => {
+                // console.log(response);
+                if (response.id !== "") {
+                    alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
+                    navigate(`/VendorResponse/${id}?Vid=${response.id}`);
+                } else {
+                    alert("Your Tickets is not booked 😭😭😭😭😭😭")
+                }
+            });
+            // console.log(formValue);
+        } else {
+            api.InsertDate(formValue).then(response => {
+                console.log(response);
+                if (response.id !== "") {
+                    alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
+                    navigate(`/VendorResponse/${id}?Vid=${response.id}`);
+                } else {
+                    alert("Your Tickets is not booked 😭😭😭😭😭😭")
+                }
+            });
+        }
+        // console.log(formValue);
     }
 
     const fetchData = useCallback(() => {
@@ -93,72 +127,100 @@ function GuestForm() {
                                 </Row>
                             </Card.Body>
                         </Card>
-                        <Form method='POST' action='/' onSubmit={HandleSubmit}>
-                            <Card className="border border-success border-3">
-                                <Card.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridEmail">
-                                            <Form.Label>Vendor Name:</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Your Name" name="VendorName" value={formValue.VendorName} onChange={HandleInput} />
+                        <button type="button" className="btn btn-primary mb-3 me-3" onClick={ handleButtonForm }>Add Vendor</button>
+                        <button type="button" className="btn btn-secondary mb-3" onClick={handleButtonSelection}>Appoint Vendor</button>
+                        {formVisible && (
+                            <Form method='POST' action='/' onSubmit={HandleSubmit}>
+                                <Card className="border border-success border-3">
+                                    <Card.Body>
+                                        <Row className="mb-3">
+                                            <Form.Group as={Col} controlId="formGridEmail">
+                                                <Form.Label>Vendor Name:</Form.Label>
+                                                <Form.Control type="text" placeholder="Enter Your Name" name="VendorName" value={formValue.VendorName} onChange={HandleInput} />
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridPassword">
+                                                <Form.Label>Vendor Phone Number</Form.Label>
+                                                <Form.Control type="tel" placeholder="Enter Your Phone Number" name="VendorPhone" value={formValue.VendorPhone} onChange={HandleInput} />
+                                            </Form.Group>
+                                        </Row>
+                                        <Row className="mb-3">
+                                            <Form.Group as={Col} controlId="formGridEmail">
+                                                <Form.Label>Vendor Email ID:</Form.Label>
+                                                <Form.Control type="email" placeholder="Enter Your Email" name="VendorEmail" value={formValue.VendorEmail} onChange={HandleInput} />
+                                            </Form.Group>
+                                            <Form.Group as={Col} controlId="formGridEmail">
+                                                <Form.Label>Number of Tickets:</Form.Label>
+                                                <Form.Control type="number" placeholder="Enter your count" name="TicketCount" value={formValue.TicketCount} onChange={HandleInput} />
+                                            </Form.Group>
+                                        </Row>
+
+                                        <Form.Group className="mb-3" controlId="formGridAddress1">
+                                            <Form.Label>Address</Form.Label>
+                                            <Form.Control type='text' placeholder="1234 Main St" name="VendorAddress" value={formValue.VendorAddress} onChange={HandleInput} />
                                         </Form.Group>
 
-                                        <Form.Group as={Col} controlId="formGridPassword">
-                                            <Form.Label>Vendor Phone Number</Form.Label>
-                                            <Form.Control type="tel" placeholder="Enter Your Phone Number" name="VendorPhone" value={formValue.VendorPhone} onChange={HandleInput} />
+                                        <Form.Group className="mb-3" controlId="formGridAddress2">
+                                            <Form.Label>Address 2</Form.Label>
+                                            <Form.Control type='text' placeholder="Apartment, studio, or floor" name="VendorAddress_1" value={formValue.VendorAddress_1} onChange={HandleInput} />
                                         </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridEmail">
-                                            <Form.Label>Vendor Email ID:</Form.Label>
-                                            <Form.Control type="email" placeholder="Enter Your Email" name="VendorEmail" value={formValue.VendorEmail} onChange={HandleInput} />
-                                        </Form.Group>
+
+                                        <Row className="mb-3">
+                                            <Form.Group as={Col} controlId="formGridCity">
+                                                <Form.Label>City</Form.Label>
+                                                <Form.Control type='text' name="City" value={formValue.City} onChange={HandleInput} />
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridState">
+                                                <Form.Label>State</Form.Label>
+                                                <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput} ref={selectRef}>
+                                                    <option value=''>Choose...</option>
+                                                    {state.map(state => (
+                                                        <option key={state.value} value={state.name}>
+                                                            {state.name}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </Form.Group>
+
+                                            <Form.Group as={Col} controlId="formGridZip">
+                                                <Form.Label>Zip</Form.Label>
+                                                <Form.Control type='number' name="Zip" value={formValue.Zip} onChange={HandleInput} />
+                                            </Form.Group>
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                                <div className="text-center mt-3">
+                                    <Button variant="primary" type="submit">
+                                        Submit
+                                    </Button>
+                                </div>
+                            </Form>
+                        )}
+                        <div>
+                            {selectVisible && (
+                                <form method='POST' action='/' onSubmit={HandleSubmit}>
+                                    <div className="form-group">
+                                        <label htmlFor="vendorSelect">Select Vendor</label>
+                                        <select className="form-control" id="vendorSelect" name='VendorName' value={formValue.VendorName} onChange={HandleInput} ref={selectRef}>
+                                            <option value="">Choose..</option>
+                                            {vendor.map((v) => (
+                                                <option key={v.id} value={v.id}>
+                                                    {v.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         <Form.Group as={Col} controlId="formGridEmail">
                                             <Form.Label>Number of Tickets:</Form.Label>
                                             <Form.Control type="number" placeholder="Enter your count" name="TicketCount" value={formValue.TicketCount} onChange={HandleInput} />
                                         </Form.Group>
-                                    </Row>
-
-                                    <Form.Group className="mb-3" controlId="formGridAddress1">
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Control type='text' placeholder="1234 Main St" name="VendorAddress" value={formValue.VendorAddress} onChange={HandleInput} />
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3" controlId="formGridAddress2">
-                                        <Form.Label>Address 2</Form.Label>
-                                        <Form.Control type='text' placeholder="Apartment, studio, or floor" name="VendorAddress_1" value={formValue.VendorAddress_1} onChange={HandleInput} />
-                                    </Form.Group>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridCity">
-                                            <Form.Label>City</Form.Label>
-                                            <Form.Control type='text' name="City" value={formValue.City} onChange={HandleInput} />
-                                        </Form.Group>
-
-                                        <Form.Group as={Col} controlId="formGridState">
-                                            <Form.Label>State</Form.Label>
-                                            <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput} ref={selectRef}>
-                                                <option value=''>Choose...</option>
-                                                {state.map(state => (
-                                                    <option key={state.value} value={state.name} className='text-white'>
-                                                        {state.name}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
-                                        </Form.Group>
-
-                                        <Form.Group as={Col} controlId="formGridZip">
-                                            <Form.Label>Zip</Form.Label>
-                                            <Form.Control type='number' name="Zip" value={formValue.Zip} onChange={HandleInput} />
-                                        </Form.Group>
-                                    </Row>
-                                </Card.Body>
-                            </Card>
-                            <div className="text-center mt-3">
-                                <Button variant="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </div>
-                        </Form>
+                                    </div>
+                                    <Button variant="primary" type="submit">
+                                        Submit
+                                    </Button>
+                                </form>
+                            )}
+                        </div>
                     
         
                     </div>

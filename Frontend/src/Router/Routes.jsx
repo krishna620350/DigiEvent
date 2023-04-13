@@ -6,7 +6,7 @@ import FormPropsTextFields from '../Components/Js/login';
 import ResponsiveExample from '../Components/Js/Response';
 import GuestForm from '../Components/Js/GuestForm';
 import EventForm from '../Components/Js/EventForm';
-import Participant from '../Components/Js/Participant';
+import Guest from '../Components/Js/Guest';
 import Vendor from '../Components/Js/Vendor';
 import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
@@ -44,8 +44,8 @@ class Router extends React.Component {
                             element={<ResponsiveExample />}
                          />
                         <Route
-                            path="/Participant/:id"
-                            element={<Participant />}
+                            path="/Ticket/:id"
+                            element={<Guest />}
                         />
                         <Route
                             path="/VendorResponse/:id"
