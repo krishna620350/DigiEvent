@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import React from 'react';
 
 import App from '../Components/App';
-import FormPropsTextFields from '../Components/Js/login';
+import Login from '../Components/Js/login';
 import ResponsiveExample from '../Components/Js/Response';
 import GuestForm from '../Components/Js/GuestForm';
 import EventForm from '../Components/Js/EventForm';
@@ -10,6 +10,7 @@ import Guest from '../Components/Js/Guest';
 import Vendor from '../Components/Js/Vendor';
 import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
+import Signup from '../Components/Js/Signup';
 
 class Router extends React.Component {
     render() {
@@ -21,11 +22,11 @@ class Router extends React.Component {
                         />
                         <Route
                             path="/login"
-                            element={<FormPropsTextFields />}
+                            element={<Login />}
                         />
-                        <Route 
-                            path="/Register"
-                            element={<FormPropsTextFields />}
+                        <Route
+                            path="/signup"
+                            element={<Signup />}
                         />
                         <Route 
                             path="/Event"
