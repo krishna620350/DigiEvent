@@ -6,15 +6,14 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom"; //useNavigate 
 import QRCode from 'qrcode.react';
 import  jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import dhoni from "./dhoni.jpg";
+// import autoTable from 'jspdf-autotable';
+// import dhoni from "./dhoni.jpg";
 
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 
-// import Header from "./Header";
 import Menu from './Navbar';
 import state from "../../Json/State.json";
 import GuestApi from '../../Apis/GuestApi';
@@ -32,7 +31,7 @@ import {
 // import { direction } from 'html2canvas/dist/types/css/property-descriptors/direction';
 
 function GuestForm() {
-    const [name, setName] = useState("")
+    // const [name, setName] = useState("")
     const [token, setToken] = useState([])
     const [centredModal, setCentredModal] = useState(false);
 
@@ -43,7 +42,7 @@ function GuestForm() {
 
     const selectRef = useRef();
     const { id } = useParams();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [formValue, setFormValue] = useState([{
         id: id,
@@ -62,10 +61,6 @@ function GuestForm() {
         let data = [...formValue];
         data[index][event.target.name] = event.target.value;
         setFormValue(data);
-        // const { name, value } = e.target;
-        // setFormValue({ ...formValue, [name]: value });
-        // console.log(formValue);
-        // setName(event.target.value)
     }
 
     const addGuest = () => {
@@ -162,9 +157,9 @@ function GuestForm() {
         unit: 'mm',
         format: "a4"
       });
-      const backgroundImage = dhoni;
+      // const backgroundImage = dhoni;
       
-      pdf.addImage(backgroundImage, 'PNG', 0, 0, 210, 297);
+      // pdf.addImage(backgroundImage, 'PNG', 0, 0, 210, 297);
     
       // Loop through each QR code on the page
       const qrs = document.getElementsByClassName("qr");
@@ -178,7 +173,7 @@ function GuestForm() {
           count = 20;
           currPage++;
           // pdf.text(data[0].EventName, 40, 5)
-          pdf.addImage(backgroundImage, 'PNG', 0, 0, 210, 297);
+          // pdf.addImage(backgroundImage, 'PNG', 0, 0, 210, 297);
         }
         const arr = [currValue.GuestName, currValue.GuestPhone, currValue.GuestEmail, currValue.GuestAddress];
     
@@ -397,7 +392,7 @@ function GuestForm() {
                                         <Form.Select type='text' name="State" value={input.State} onChange={event => HandleInput(index, event)} ref={selectRef}>
                                         <option value=''>Choose...</option>
                                         {state.map(state => (
-                                            <option key={state.value} value={state.name} className='text-white'>
+                                            <option key={state.value} value={state.name}>
                                                 {state.name}
                                             </option>
                                         ))}
@@ -410,10 +405,11 @@ function GuestForm() {
                                 </Form.Group>
                                 </Row>
                     </Card.Body>
-                                </Card>
-                                <Button variant="danger" className='mt-2' onClick={() => removeGuest(index)}>
-                                    Remove Guest
-                                </Button>
+                            </Card>
+                            {formValue.length > 1 && (<Button variant="danger" className='mt-2' onClick={() => removeGuest(index)}>
+                              Remove Guest
+                            </Button>)}
+                                
                             </div>
                         )
                     })}
