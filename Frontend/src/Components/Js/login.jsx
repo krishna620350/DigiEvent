@@ -12,18 +12,18 @@ function Login() {
     password:"",
   });
 
+  const HandleInput = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({ ...userInfo, [name]: value });
+    // console.log(formValue);
+  }
+  
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
     if(!userInfo.email && !userInfo.password ) return;
     
   }
-  const HandleInput = (e) => {
-    const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
-    // console.log(formValue);
-  }
-
   return (
     <>
       <Container >
