@@ -47,13 +47,14 @@ function VendorResponse() {
 
     useEffect(() => {
         fetchData();
+        // console.log(data[0]);
     }, [fetchData]);
 
     useEffect(() => {
         fetchDataGuest();
     }, [fetchDataGuest]);
     // console.log(Guest)
-    // console.log(data[0].VendorName);
+    
     return (<>
         <Menu />
         <Container className='mb-5'>

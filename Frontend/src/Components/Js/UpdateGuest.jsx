@@ -12,6 +12,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Menu from './Navbar';
 import state from "../../Json/State.json";
 import GuestApi from '../../Apis/GuestApi';
+import Footer from './Footer';
 
 function GuestForm() {
     const [data, setData] = useState([]);
@@ -52,7 +53,7 @@ function GuestForm() {
         api.UpdateData(formValue).then(response => {
             if (response.id !== "") {
                 alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏");
-                navigate(`/Guest/${id}?Vid=${response.id}&ticketid=${response.TicketId}`);
+                navigate(`/Ticket/${id}?Vid=${response.id}&ticketid=${response.TicketId}`);
             } else {
                 alert("Your Tickets is not booked 😭😭😭😭😭😭")
             }
@@ -76,7 +77,7 @@ function GuestForm() {
         <>
             {/* <Header /> */}
             <Menu />
-            <Container className='text-white'>
+            <Container className='text-white mb-5'>
                 <h2 className='text-center mb-1 text-danger'>
                     Update Guest <Badge bg="secondary">Form</Badge>
                 </h2>
@@ -163,6 +164,7 @@ function GuestForm() {
                     </div>
                 )}
             </Container>
+            <Footer />
         </>
 
     );
