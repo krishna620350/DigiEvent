@@ -64,9 +64,7 @@ function Login() {
         <Form.Control type="password" placeholder="Password" name='password' value={userInfo.password} onChange={HandleInput} />
         <FormErrorMessage errorMessage={errorMessage.password}/>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
+      
       </Card.Body>
       </Card>
       <Button variant="primary" type="submit" className='mb-5'>
