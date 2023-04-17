@@ -2,7 +2,7 @@ import { Router } from "express";
 import GuestController from "../Controller/GuestController.js";
 
 const GuestRouter = new Router();
-const url = process.env.URL_Guest;
+const url = process.env.URL_GUEST;
 // console.log(url);
 const Controller = new GuestController;
 

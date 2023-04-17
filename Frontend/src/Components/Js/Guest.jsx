@@ -12,6 +12,7 @@ import html2canvas from 'html2canvas';
 import URL from "../../Json/Url.json";
 import GuestApi from "../../Apis/GuestApi";
 import Menu from "./Navbar";
+import Footer from './Footer';
 
 function Participant() {
 
@@ -61,7 +62,7 @@ function Participant() {
                         <Col><b>Guest Name:</b> {data[0].GuestName}</Col>
                     </Row>
                     <Row>
-                        <Col><b>Host Contact:</b> {`${data[0].HostEmail} | ${data[0].HostPhone} | ${data[0].EventAddress} ${data[0].EventAddress_1}`}</Col>
+                        <Col><b>Guest Contact:</b> {`${data[0].GuestEmail} | ${data[0].GuestPhone}`}</Col>
                     </Row>
                     <Table responsive striped bordered hover variant="light">
                         <thead>
@@ -97,7 +98,8 @@ function Participant() {
                     </div>
                     
             )}
-        </Container>
+            </Container>
+            <Footer />
     </>
     );
 }

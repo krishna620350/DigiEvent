@@ -47,16 +47,13 @@ export default class VendorController {
             const query2 = await getDocs(collection(FireStore, "Vendors"));
             query1.forEach((doc) => {
                 if (doc.id === id) {
-                    // console.log(doc.data().Guests.length);
                     doc.data().Vendors.forEach(item => {
                         if (item.Vid === Vid) {
-                            query2.forEach((docitem) => {
-                                results.push(docitem.data());
-                                // console.log(results);
-                            })
+                            const vendorDoc = query2.docs.find(docitem => docitem.id === Vid);
+                            if (vendorDoc) {
+                                results.push(vendorDoc.data());
+                            }
                             item.GuestId.forEach(guestid => guest.push(guestid));
-                            // results.push(item.GuestId);
-                            
                         }
                     })
                 }
@@ -64,12 +61,12 @@ export default class VendorController {
             results.push({ GID: guest });
             // console.log(results)
         } catch (e) {
-            // console.log(e);
             res.status(404).json(e);
         } finally {
             res.status(200).json(results);
         }
     };
+
 
     UniqueID = () => {
         const randomBytes = crypto.randomBytes(12);
@@ -77,7 +74,7 @@ export default class VendorController {
         return hexString;
     };
 
-    FindRecordAndUpdate = async (id, VID, result) => {
+    FindRecordAndUpdate = async (id, VID, result, TicketCount) => {
         // console.log(result, id, VID);
        const querySnapshot = await getDocs(collection(FireStore, "Event"));
        querySnapshot.forEach(async (doc) => {
@@ -89,7 +86,11 @@ export default class VendorController {
                if (vendorIndex === -1) {
                    throw new Error(`Vendor with ID ${VID} does not exist in event with ID ${id}.`);
                }
-               const updatedVendor = { ...vendors[vendorIndex], GuestId: result };
+               const updatedVendor = {
+                   ...vendors[vendorIndex],
+                   GuestId: result,
+                   TicketCount: TicketCount
+                };
             //    console.log(updatedVendor);
                const updatedVendors = [
                    ...vendors.slice(0, vendorIndex),
@@ -119,7 +120,6 @@ export default class VendorController {
                 City: req.body.City,
                 State: req.body.State,
                 Zip: req.body.Zip,
-                TicketCount: req.body.TicketCount,
             }
             const docRef = await addDoc(collection(FireStore, "Vendors"), vendorDocuments);
             const Vid = docRef.id;
@@ -151,8 +151,9 @@ export default class VendorController {
                     }).catch(e => res.status(404).json(e));
                     i--;
                 }
+                const TicketCount = req.body.TicketCount;
                 // console.log(result);
-                await this.FindRecordAndUpdate(id, Vid, result).then(() => {
+                await this.FindRecordAndUpdate(id, Vid, result, TicketCount ).then(() => {
                     response = Vid;
                     // console.log(response);
                 });
@@ -199,7 +200,8 @@ export default class VendorController {
                     i--;
                 }
                 // console.log(result);
-                await this.FindRecordAndUpdate(id, Vid, result).then(() => {
+                const TicketCount = req.body.TicketCount;
+                await this.FindRecordAndUpdate(id, Vid, result, TicketCount).then(() => {
                     response = Vid;
                     // console.log(response);
                 });
