@@ -5,8 +5,13 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import validateAuthInput from '../../utils/validateAuthInput';
+import FormErrorMessage from './FormErrorMessage';
 
 function Signup() {
+  const {currentUser} =useAuth();
+  // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
     email:"",
@@ -15,19 +20,36 @@ function Signup() {
     confirmPassword:""
   });
 
+  const [errorMessage,setErrorMessage]=useState({
+    name:"",
+    email:"",
+    visitorType:"",
+    password:"",
+    confirmPassword:""
+  });
+
+  
+
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
-    if(!userInfo.name && !userInfo.password && !userInfo.email && !userInfo.visitorType && !userInfo.confirmPassword) return;
-    if(userInfo.password !== userInfo.confirmPassword){
-      console.log("password did not match.");
+    let status = 1;
+    for(let [name,value] of Object.entries(userInfo)){
+       status &= validateAuthInput(name,value,userInfo,setErrorMessage);
+    }
+
+    if(!status)
+      console.log("Form validation failed,it is not submitted");
+
     }
     
-  }
+  
   const HandleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
     // console.log(formValue);
+    validateAuthInput(name,value,userInfo,setErrorMessage);
+
 }
 
   return (
@@ -77,10 +99,12 @@ function Signup() {
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" name="password" value={userInfo.password} onChange={HandleInput}/>
+        <FormErrorMessage errorMessage={errorMessage.password}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Confirm Password</Form.Label>
         <Form.Control type="password" placeholder="Confirm Password" name="confirmPassword" value={userInfo.confirmPassword} onChange={HandleInput}/>
+        <FormErrorMessage errorMessage={errorMessage.confirmPassword}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
         <Form.Check type="checkbox" label="Check me out" />
