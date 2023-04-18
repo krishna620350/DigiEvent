@@ -53,7 +53,7 @@ class Router extends React.Component {
                             element={<VendorResponse />}
                          />
                         <Route
-                            path="/updateguest/:id"
+                            path="/guest/:id/:vid/:ticketid"
                             element={<UpdateGuest />}
                         />
                     </Routes>

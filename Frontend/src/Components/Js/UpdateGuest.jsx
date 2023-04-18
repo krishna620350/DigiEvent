@@ -18,10 +18,8 @@ function GuestForm() {
     const [data, setData] = useState([]);
 
     const selectRef = useRef();
-    const { id } = useParams();
-    const urlParams = new URLSearchParams(window.location.search);
-    const Vid = urlParams.get('vid');
-    const TicketId = urlParams.get('ticketid');
+    const { id, vid, ticketid } = useParams();
+    
     // console.log(Vid, TicketId);
     const navigate = useNavigate();
 
@@ -48,8 +46,8 @@ function GuestForm() {
         e.preventDefault();
         // console.log(formValue);
         formValue.status = -1
-        formValue.Vid = Vid;
-        formValue.TicketId = TicketId;
+        formValue.Vid = vid;
+        formValue.TicketId = ticketid;
         api.UpdateData(formValue).then(response => {
             if (response.id !== "") {
                 alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏");
@@ -98,69 +96,76 @@ function GuestForm() {
                                 </Row>
                             </Card.Body>
                         </Card>
-                        <Form method='POST' action='/' onSubmit={HandleSubmit}>
-                            <Card className="border border-success border-3">
-                                <Card.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridEmail">
-                                            <Form.Label>Guest Name:</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter Your Name" name="GuestName" value={formValue.VendorName} onChange={HandleInput} />
-                                        </Form.Group>
+                        {data[0].Guests.map((key, item) => {
+                            if (item.Ticket === ticketid && item.Status === -1) {
+                                return (
+                                    <Form method='POST' action='/' onSubmit={HandleSubmit} key={key}>
+                                        <Card className="border border-success border-3">
+                                            <Card.Body>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} controlId="formGridEmail">
+                                                        <Form.Label>Guest Name:</Form.Label>
+                                                        <Form.Control type="text" placeholder="Enter Your Name" name="GuestName" value={formValue.VendorName} onChange={HandleInput} />
+                                                    </Form.Group>
 
-                                        <Form.Group as={Col} controlId="formGridPassword">
-                                            <Form.Label>Guest Phone Number</Form.Label>
-                                            <Form.Control type="tel" placeholder="Enter Your Phone Number" name="GuestPhone" value={formValue.VendorPhone} onChange={HandleInput} />
-                                        </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridEmail">
-                                            <Form.Label>Guest Email ID:</Form.Label>
-                                            <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={formValue.VendorEmail} onChange={HandleInput} />
-                                        </Form.Group>
-                                    </Row>
+                                                    <Form.Group as={Col} controlId="formGridPassword">
+                                                        <Form.Label>Guest Phone Number</Form.Label>
+                                                        <Form.Control type="tel" placeholder="Enter Your Phone Number" name="GuestPhone" value={formValue.VendorPhone} onChange={HandleInput} />
+                                                    </Form.Group>
+                                                </Row>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} controlId="formGridEmail">
+                                                        <Form.Label>Guest Email ID:</Form.Label>
+                                                        <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={formValue.VendorEmail} onChange={HandleInput} />
+                                                    </Form.Group>
+                                                </Row>
 
-                                    <Form.Group className="mb-3" controlId="formGridAddress1">
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Control type='text' placeholder="1234 Main St" name="GuestAddress" value={formValue.VendorAddress} onChange={HandleInput} />
-                                    </Form.Group>
+                                                <Form.Group className="mb-3" controlId="formGridAddress1">
+                                                    <Form.Label>Address</Form.Label>
+                                                    <Form.Control type='text' placeholder="1234 Main St" name="GuestAddress" value={formValue.VendorAddress} onChange={HandleInput} />
+                                                </Form.Group>
 
-                                    <Form.Group className="mb-3" controlId="formGridAddress2">
-                                        <Form.Label>Address 2</Form.Label>
-                                        <Form.Control type='text' placeholder="Apartment, studio, or floor" name="GuestAddress_1" value={formValue.VendorAddress_1} onChange={HandleInput} />
-                                    </Form.Group>
+                                                <Form.Group className="mb-3" controlId="formGridAddress2">
+                                                    <Form.Label>Address 2</Form.Label>
+                                                    <Form.Control type='text' placeholder="Apartment, studio, or floor" name="GuestAddress_1" value={formValue.VendorAddress_1} onChange={HandleInput} />
+                                                </Form.Group>
 
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="formGridCity">
-                                            <Form.Label>City</Form.Label>
-                                            <Form.Control type='text' name="City" value={formValue.City} onChange={HandleInput} />
-                                        </Form.Group>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} controlId="formGridCity">
+                                                        <Form.Label>City</Form.Label>
+                                                        <Form.Control type='text' name="City" value={formValue.City} onChange={HandleInput} />
+                                                    </Form.Group>
 
-                                        <Form.Group as={Col} controlId="formGridState">
-                                            <Form.Label>State</Form.Label>
-                                            <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput} ref={selectRef}>
-                                                <option value=''>Choose...</option>
-                                                {state.map(state => (
-                                                    <option key={state.value} value={state.name}>
-                                                        {state.name}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
-                                        </Form.Group>
+                                                    <Form.Group as={Col} controlId="formGridState">
+                                                        <Form.Label>State</Form.Label>
+                                                        <Form.Select type='text' name="State" value={formValue.State} onChange={HandleInput} ref={selectRef}>
+                                                            <option value=''>Choose...</option>
+                                                            {state.map(state => (
+                                                                <option key={state.value} value={state.name}>
+                                                                    {state.name}
+                                                                </option>
+                                                            ))}
+                                                        </Form.Select>
+                                                    </Form.Group>
 
-                                        <Form.Group as={Col} controlId="formGridZip">
-                                            <Form.Label>Zip</Form.Label>
-                                            <Form.Control type='number' name="Zip" value={formValue.Zip} onChange={HandleInput} />
-                                        </Form.Group>
-                                    </Row>
-                                </Card.Body>
-                            </Card>
-                            <div className="text-center mt-3">
-                                <Button variant="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </div>
-                        </Form>
-                        
+                                                    <Form.Group as={Col} controlId="formGridZip">
+                                                        <Form.Label>Zip</Form.Label>
+                                                        <Form.Control type='number' name="Zip" value={formValue.Zip} onChange={HandleInput} />
+                                                    </Form.Group>
+                                                </Row>
+                                            </Card.Body>
+                                        </Card>
+                                        <div className="text-center mt-3">
+                                            <Button variant="primary" type="submit">
+                                                Submit
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                );
+                            }
+                            return null;
+                        })}
+                        {data[0].Guests.filter((item) => item.Ticket === ticketid && item.Status === -1).length === 0 ? <h3 className='text-danger'>Guest Already Updated</h3> : null}
                     </div>
                 )}
             </Container>
