@@ -20,7 +20,7 @@ function GuestForm() {
     const selectRef = useRef();
     const { id } = useParams();
     const urlParams = new URLSearchParams(window.location.search);
-    const Vid = urlParams.get('Vid');
+    const Vid = urlParams.get('vid');
     const TicketId = urlParams.get('ticketid');
     // console.log(Vid, TicketId);
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ function GuestForm() {
         api.UpdateData(formValue).then(response => {
             if (response.id !== "") {
                 alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏");
-                navigate(`/Ticket/${id}?Vid=${response.id}&ticketid=${response.TicketId}`);
+                navigate(`/ticket/${id}?vid=${response.id}&ticketid=${response.TicketId}`);
             } else {
                 alert("Your Tickets is not booked 😭😭😭😭😭😭")
             }

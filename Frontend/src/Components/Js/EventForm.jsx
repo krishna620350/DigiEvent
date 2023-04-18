@@ -45,7 +45,7 @@ function EventForm() {
             if (response !== '') {
                 // console.log(response);
                 alert("You have successfully Book a event 🙏🙏🙏🙏🙏")
-                navigate(`/Response/${response}`);
+                navigate(`/event/${response}`);
             } else {
                 alert("Your event is not booked 😭😭😭😭😭😭")
             }

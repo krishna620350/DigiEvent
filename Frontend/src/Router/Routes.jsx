@@ -3,7 +3,7 @@ import React from 'react';
 
 import App from '../Components/App';
 import Login from '../Components/Js/login';
-import ResponsiveExample from '../Components/Js/Response';
+import Responsive from '../Components/Js/Response';
 import GuestForm from '../Components/Js/GuestForm';
 import EventForm from '../Components/Js/EventForm';
 import Guest from '../Components/Js/Guest';
@@ -29,33 +29,33 @@ class Router extends React.Component {
                             element={<Signup />}
                         />
                         <Route 
-                            path="/Event"
+                            path="/event"
                             element={<EventForm />}
                         />
+                        <Route
+                            path="/event/:id"
+                            element={<Responsive />}
+                            />
                         <Route 
-                            path="/Guest/:id"
+                            path="/guest/:id"
                             element={<GuestForm />}
                         />
+                        <Route
+                            path="/ticket/:id"
+                            element={<Guest />}
+                        />
                         <Route 
-                            path="/Vendor/:id"
+                            path="/vendor/:id"
                             element={<Vendor />}
                         />
                         <Route
-                            path="/Response/:id"
-                            element={<ResponsiveExample />}
-                         />
-                        <Route
-                            path="/Ticket/:id"
-                            element={<Guest />}
-                        />
-                        <Route
-                            path="/VendorResponse/:id"
+                            path="/vendor/:id/:vid"
                             element={<VendorResponse />}
                          />
-                         <Route
-                            path="/UpdateGuest/:id"
+                        <Route
+                            path="/updateguest/:id"
                             element={<UpdateGuest />}
-                         />
+                        />
                     </Routes>
                 </BrowserRouter>
     }

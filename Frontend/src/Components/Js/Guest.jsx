@@ -19,7 +19,7 @@ function Participant() {
     const { id } = useParams();
     const urlParams = new URLSearchParams(window.location.search);
     const TicketId = urlParams.get('ticketid');
-    const Vid = urlParams.get('Vid');
+    const Vid = urlParams.get('vid');
     // console.log(Vid,TicketId);
     const [data, setData] = useState([]);
     const api = useMemo(() => new GuestApi(), []);

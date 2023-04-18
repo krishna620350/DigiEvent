@@ -14,7 +14,7 @@ class Header extends React.Component {
                     <ul>
                         <div className="eventContainer">
                             <li ><p className="create-event">Want to organise a business event? Or an event for an informal occasion? We've got you covered.</p></li>
-                            <Link to='/Event' className="button1">create event</Link>
+                            <Link to='/event' className="button1">create event</Link>
                         </div>
                         <div className="ongoingContainer">
                             <li ><a href="/" className="ongoing-events">Ongoing Events </a></li>

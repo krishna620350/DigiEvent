@@ -16,9 +16,7 @@ import Footer from './Footer';
 
 function VendorResponse() {
 
-    const { id } = useParams();
-    const urlParams = new URLSearchParams(window.location.search);
-    const Vid = urlParams.get('Vid');
+    const { id, vid } = useParams();
     // console.log(guest); // prints "9988776655" to the console
     const [data, setData] = useState([]);
     const [Guest, setDataGuest] = useState([]);
@@ -27,14 +25,14 @@ function VendorResponse() {
     const gapi = useMemo(() => new GuestApi(), []);
 
     const fetchData = useCallback(() => {
-        api.FetchData(id, Vid).then(result => {
+        api.FetchData(id, vid).then(result => {
             // console.log(result);
             if (result !== []) setData(result);
             else alert('data not found');
         }).catch(err => {
             console.log(err);
         });
-    }, [id, Vid, api]);
+    }, [id, vid, api]);
 
     const fetchDataGuest = useCallback(() => {
         gapi.ReadData(id).then(result => {
@@ -91,14 +89,14 @@ function VendorResponse() {
                                         <td style={isGuestUpdated ? {} : { backgroundColor: '#98FB98' }}>{item.id}</td>
                                         <td style={isGuestUpdated ? {} : { backgroundColor: '#98FB98' }}>
                                             {isGuestUpdated ? (
-                                                <QRCode value={`${URL.URL}/UpdateGuest/${id}?Vid=${Vid}&ticketid=${item.id}`} size="200" />
+                                                <QRCode value={`${URL.URL}/UpdateGuest/${id}?Vid=${vid}&ticketid=${item.id}`} size="200" />
                                             ) : (
                                                     <span className='text-danger fw-bold bg-transparent'>Guest Already Updated</span>
                                             )}
                                         </td>
                                         <td style={isGuestUpdated ? {} : { backgroundColor: '#98FB98' }}>
                                             {isGuestUpdated ? (
-                                                <Link to={`/UpdateGuest/${id}?Vid=${Vid}&ticketid=${item.id}`} target='_blank'>
+                                                <Link to={`/updateguest/${id}?vid=${vid}&ticketid=${item.id}`} target='_blank'>
                                                     <Button className='btn-danger'>
                                                         Update Ticket
                                                     </Button>

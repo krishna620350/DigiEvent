@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/App.js",
-    "dev": "FAST_REFRESH=false nodemon src/App.js -e js,json"
+    "dev": "nodemon src/App.js -e js,json"
   },
   "author": "tcs",
   "license": "ISC",

@@ -69,7 +69,7 @@ function GuestForm() {
                 // console.log(response);
                 if (response.id !== "") {
                     alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                    navigate(`/VendorResponse/${id}?Vid=${response.id}`);
+                    navigate(`/vendor/${id}/${response.id}`);
                 } else {
                     alert("Your Tickets is not booked 😭😭😭😭😭😭")
                 }
@@ -80,7 +80,7 @@ function GuestForm() {
                 console.log(response);
                 if (response.id !== "") {
                     alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                    navigate(`/VendorResponse/${id}?Vid=${response.id}`);
+                    navigate(`/vendor/${id}/${response.id}`);
                 } else {
                     alert("Your Tickets is not booked 😭😭😭😭😭😭")
                 }

@@ -16,7 +16,7 @@ import EventApi from "../../Apis/EventApi";
 import Footer from './Footer';
 import Menu from "./Navbar";
 
-function ResponsiveExample() {
+function Responsive() {
 
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -120,8 +120,8 @@ function ResponsiveExample() {
                 </Col>
                 <Col>
                   <Row>
-                    <Col><Link to={`/Guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
-                    <Col><Link to={`/Vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
+                    <Col><Link to={`/guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
+                    <Col><Link to={`/vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
                   </Row>
                 </Col>
               </Row>
@@ -210,4 +210,4 @@ function ResponsiveExample() {
   );
 }
 
-export default ResponsiveExample;
+export default Responsive;
