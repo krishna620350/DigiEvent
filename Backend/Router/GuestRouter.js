@@ -12,6 +12,6 @@ GuestRouter.post(`${url}+/addData`, Controller.InsertData);
 
 GuestRouter.post(`${url}+/fetchData`, Controller.FetchData);
 
-// EventRouter.delete(`${url}+/deleteData`, Controller.DeleteData);
+GuestRouter.put(`${url}+/updateData`, Controller.UpdateData);
 
 export default GuestRouter;

@@ -1,8 +1,7 @@
 import URL from "../Json/Url.json";
+export default class VendorApi {
+    url = `${URL.APIURL}/vendor`;
 
-export default class GuestApi {
-    url = `${URL.APIURL}/guest`;
-    
     ReadData = async (id) => {
         // console.log(this.url);
         const data = {
@@ -20,12 +19,11 @@ export default class GuestApi {
         return responseData;
     };
 
-    FetchData = async (id, Vid, TicketId) => {
-        // console.log(this.url, id, Vid, TicketId);
+    FetchData = async (id, Vid) => {
+        // console.log(this.url);
         const data = {
             id: id,
-            Vid: Vid,
-            TicketId: TicketId
+            Vid: Vid
         };
         const response = await fetch(`${this.url}/fetchData`, {
             method: 'POST',
@@ -50,7 +48,8 @@ export default class GuestApi {
         const responseData = await response.json();
         return responseData;
     }
-    UpdateData = async (formValue) => {
+
+    UpdateData = async (formValue) => { 
         // console.log(formValue);
         const response = await fetch(`${this.url}/updateData/`, {
             method: 'PUT',

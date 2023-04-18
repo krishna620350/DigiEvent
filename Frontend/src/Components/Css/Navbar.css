@@ -1,7 +1,8 @@
+@import url("./Color.css");
 nav {
     display: flex;
     align-items: center;
-    padding: 20px 8%;
+    padding: 5px 8%;
 }
 
 nav .logo {
@@ -35,7 +36,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: aliceblue;
+    color: var(--bg-color);
     padding: 10px 15px;
     border-radius: 50px;
     transition: .2s;
@@ -95,4 +96,8 @@ nav .toggle-btn {
     font-family: 'Manrope', sans-serif;
     font-family: 'Quicksand', sans-serif;
 
+}
+
+.login{
+    cursor: pointer;
 }
