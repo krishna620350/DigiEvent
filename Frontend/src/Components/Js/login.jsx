@@ -5,23 +5,42 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import validateAuthInput from '../../utils/validateAuthInput';
+import FormErrorMessage from './FormErrorMessage';
 
 function Login() {
+  const {currentUser} =useAuth();
+  // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     email:"",
     password:"",
   });
+  const [errorMessage,setErrorMessage]=useState({
+    email:"",
+    password:"",
+  });
+
+  
 
   const HandleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
+    validateAuthInput(name,value,userInfo,setErrorMessage);
     // console.log(formValue);
   }
   
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
-    if(!userInfo.email && !userInfo.password ) return;
+    let status = 1;
+    for(let [name,value] of Object.entries(userInfo)){
+       status &=  validateAuthInput(name,value,userInfo,setErrorMessage);
+    }
+
+    if(!status)
+      console.log("Form validation failed,it is not submitted");
+
     
   }
   return (
@@ -43,10 +62,9 @@ function Login() {
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" name='password' value={userInfo.password} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.password}/>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
+      
       </Card.Body>
       </Card>
       <Button variant="primary" type="submit" className='mb-5'>
