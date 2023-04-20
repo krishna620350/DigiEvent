@@ -5,12 +5,10 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 
 function Signup() {
-  const {currentUser} =useAuth();
   // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
