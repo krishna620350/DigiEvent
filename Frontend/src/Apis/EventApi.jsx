@@ -18,16 +18,20 @@ export default class EventApi{
         return responseData;
     };
 
-    InsertDate = async (formValue) => {
-        const response = await fetch(`${this.url}/addData/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify(formValue)
-        });
-        const responseData = await response.json();
-        return responseData.id;
+    InsertData = async (formValue) => {
+        try {
+            const response = await fetch(`${this.url}/addData/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(formValue)
+            });
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.log(error); // Handle errors here
+        }
     }
 }
 

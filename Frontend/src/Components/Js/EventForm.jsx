@@ -40,17 +40,23 @@ function EventForm() {
 
     const HandleSubmit = (e) => {
         e.preventDefault();
-        // console.log(JSON.stringify(formValue));
-        api.InsertDate(formValue).then(response => {
-            if (response !== '') {
+        api.InsertData(formValue)
+            .then(response => {
                 // console.log(response);
-                alert("You have successfully Book a event 🙏🙏🙏🙏🙏")
-                navigate(`/event/${response}`);
-            } else {
-                alert("Your event is not booked 😭😭😭😭😭😭")
-            }
-        });
+                if (response && response.id) {
+                    alert(`Your event is booked 🙏🙏🙏🙏🙏🙏🙏`);
+                    navigate(`/event/${response.id}`);
+                } else if (response && response.error) {
+                    // console.log(response.error);
+                    alert(`Your event is not booked 😭😭😭😭😭😭\n\n${response.error}`);
+                } else {
+                    console.log("Response not defined.");
+                }
+            }).catch(error => {
+                console.log(error);
+            });
     }
+
     return (
         <>
         <Container>
