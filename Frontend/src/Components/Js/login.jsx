@@ -5,12 +5,10 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 
 function Login() {
-  const {currentUser} =useAuth();
   // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     email:"",
@@ -29,7 +27,7 @@ function Login() {
     validateAuthInput(name,value,userInfo,setErrorMessage);
     // console.log(formValue);
   }
-  
+
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
@@ -57,6 +55,8 @@ function Login() {
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
         </Form.Text>
+        <FormErrorMessage errorMessage={errorMessage.email}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">

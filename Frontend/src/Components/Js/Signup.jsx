@@ -5,12 +5,10 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 
 function Signup() {
-  const {currentUser} =useAuth();
   // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
@@ -63,10 +61,14 @@ function Signup() {
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Name</Form.Label>
         <Form.Control type="text" placeholder="Enter name" name="name" value={userInfo.name} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.name}/>
+
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" name="email" value={userInfo.email} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.email}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -94,6 +96,8 @@ function Signup() {
            onChange={HandleInput}
           />
         </div>
+        <FormErrorMessage errorMessage={errorMessage.visitorType}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
