@@ -14,7 +14,13 @@ export default class UserController{
             const querySnapshot = await getDocs(collection(FireStore, "users"));
             const results = [];
             querySnapshot.forEach((doc) => {
+                if (data.email === email && data.password === password)
+                {
                 results.push({ id: doc.id, data: doc.data() });
+                }
+                else{
+                    alert('Invalid email');
+                }
             });
             res.status(200).send(results);
         }catch(e){
@@ -24,10 +30,11 @@ export default class UserController{
 
     InsertData = async(req, res) => {
         const document = {
-            firstName: req.body.firstName,
-            middleName: req.body.middleName,
-            lastName: req.body.lastName,
-            born: req.body.born
+            name: req.body.name,
+            email: req.body.email,
+            visitorType: req.body.visitorType,
+            password: req.body.password,
+            confirmPassword : req.body.confirmPassword
         }
         
         try {
@@ -39,46 +46,62 @@ export default class UserController{
           }
     }
 
-    findRecord = async (firstName) => {
-        try{
-            const querySnapshot = await getDocs(collection(FireStore, "users"));
-            const result = [];
-            querySnapshot.forEach((doc) => {
-                if(doc.data().firstName===firstName){
-                    result.push(doc.id);
-                }
-            });
-            return result;
-        }catch(e) {
-            console.error(e);
-        }
-    }
+   // findRecord = async (name) => {
+       // try{
+         //   const querySnapshot = await getDocs(collection(FireStore, "users"));
+           // const result = [];
+            //querySnapshot.forEach((doc) => {
+              //  if(doc.data().name===name){
+               //     result.push(doc.id);
+                //}
+        //    });
+         //   return result;
+      //  }catch(e) {
+       //     console.error(e);
+      //  }
+  //  }
+    
+//     findUser = async (email, password) => {
+//     try {
+//       const querySnapshot = await getDocs(collection(FireStore, 'users'));
+//       let result = null;
+//       querySnapshot.forEach(doc => {
+//         const data = doc.data();
+//         if (data.email === email && data.password === password) {
+//           result = doc;
+//         }
+//       });
+//       return result;
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   };
+  
+    // UpdateData = async (req, res) => {
+    //     const name = req.body.name;
+    //     const Uname = req.body.Uname;
+    //     // console.log(firstName,UfirstName);
+    //     try{
+    //         const result = await this.findRecord(name);
+    //         const update = doc(FireStore, "users", result[0]);
+    //         await updateDoc(update, {
+    //             name:Uname,
+    //         });
+    //         res.status(200).send(result);
+    //     }catch(e) {
+    //         res.status(500).json({ error: e });
+    //     }
+    // }
 
-    UpdateData = async (req, res) => {
-        const firstName = req.body.firstName;
-        const UfirstName = req.body.UfirstName;
-        // console.log(firstName,UfirstName);
-        try{
-            const result = await this.findRecord(firstName);
-            const update = doc(FireStore, "users", result[0]);
-            await updateDoc(update, {
-                firstName:UfirstName,
-            });
-            res.status(200).send(result);
-        }catch(e) {
-            res.status(500).json({ error: e });
-        }
-    }
-
-    DeleteData = async (req, res) => {
-        const firstName = req.body.firstName;
-        const result = await this.findRecord(firstName)
-        // console.log(result);
-        try{
-            const Delete = await deleteDoc(doc(FireStore, "users", result[0]));
-            res.status(200).send("record deleted successfully");
-        }catch(e){
-            res.status(404).send("record not found");
-        }
-    }
+    // DeleteData = async (req, res) => {
+    //     const name = req.body.firstName;
+    //     const result = await this.findRecord(name)
+    //     // console.log(result);
+    //     try{
+    //         const Delete = await deleteDoc(doc(FireStore, "users", result[0]));
+    //         res.status(200).send("record deleted successfully");
+    //     }catch(e){
+    //         res.status(404).send("record not found");
+    //     }
+    // }
 }
