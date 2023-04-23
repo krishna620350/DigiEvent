@@ -1,0 +1,103 @@
+@import url("./Color.css");
+nav {
+    display: flex;
+    align-items: center;
+    padding: 5px 8%;
+}
+
+nav .logo {
+    font-size: 50px;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    color: #30e3da;
+    cursor: pointer;
+}
+
+.hamburger {
+
+    display: none;
+}
+
+
+nav ul {
+    flex: 1;
+    text-align: right;
+}
+
+nav ul li {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0 30px;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+nav ul li a {
+    color: var(--bg-color);
+    padding: 10px 15px;
+    border-radius: 50px;
+    transition: .2s;
+    margin: 0 5px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #30e3da;
+    color: #1d2026;
+    border: none;
+
+}
+
+
+nav .toggle-btn {
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1320px) {
+    nav {
+        padding: 20px 50px;
+    }
+}
+
+@media only screen and (max-width: 910px) {
+
+    .hamburger {
+        display: inline-block;
+        cursor: pointer;
+        margin-left: 60%;
+
+    }
+
+    .hamburger .line {
+        width: 35px;
+        height: 4px;
+        background: #fefefe;
+        margin: 6px 0;
+    }
+
+    nav ul {
+        display: none;
+    }
+}
+
+
+
+.main-content {
+    color: #30e3da;
+    text-align: center;
+    font-size: 10px;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+.login{
+    cursor: pointer;
+}
