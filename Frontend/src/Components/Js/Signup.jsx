@@ -9,6 +9,8 @@ import { useState } from 'react';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 
+let flag = 0;
+
 function Signup() {
   // const {currentUser} =useAuth();
   // console.log(currentUser);
@@ -33,6 +35,7 @@ function Signup() {
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
+    flag = 1;
     let status = 1;
     for(let [name,value] of Object.entries(userInfo)){
        status &= validateAuthInput(name,value,userInfo,setErrorMessage);
@@ -48,6 +51,7 @@ function Signup() {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
     // console.log(formValue);
+    if(flag)
     validateAuthInput(name,value,userInfo,setErrorMessage);
 
 }
@@ -57,16 +61,20 @@ function Signup() {
       <Container >
       <Menu/>
       <p class="h1">Signup Form</p><hr />
-    <Form onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit}>
     <Card className="border border-info border-3  mb-3"> 
     <Card.Body>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Name</Form.Label>
         <Form.Control type="text" placeholder="Enter name" name="name" value={userInfo.name} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.name}/>
+
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" name="email" value={userInfo.email} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.email}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -94,6 +102,8 @@ function Signup() {
            onChange={HandleInput}
           />
         </div>
+        <FormErrorMessage errorMessage={errorMessage.visitorType}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">

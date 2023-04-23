@@ -9,6 +9,8 @@ import { useState } from 'react';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 
+let flag = 0;
+
 function Login() {
   // const {currentUser} =useAuth();
   // console.log(currentUser);
@@ -26,6 +28,7 @@ function Login() {
   const HandleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
+    if(flag)
     validateAuthInput(name,value,userInfo,setErrorMessage);
     // console.log(formValue);
   }
@@ -33,6 +36,7 @@ function Login() {
   const handleSubmit=(e)=>{
     e.preventDefault();
     console.log(userInfo);
+    flag = 1;
     let status = 1;
     for(let [name,value] of Object.entries(userInfo)){
        status &=  validateAuthInput(name,value,userInfo,setErrorMessage);
@@ -48,7 +52,7 @@ function Login() {
       <Container >
       <Menu/>
       <p class="h1">Login Form</p><hr />
-    <Form onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit}>
     <Card className="border border-info border-3  mb-3"> 
     <Card.Body>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -57,6 +61,8 @@ function Login() {
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
         </Form.Text>
+        <FormErrorMessage errorMessage={errorMessage.email}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
