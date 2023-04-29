@@ -4,10 +4,11 @@ import "../Css/login.css"
 import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 // import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
+import loginApi from '../../Apis/Usersapi';
 
 let flag = 0;
 
@@ -23,6 +24,7 @@ function Login() {
     password:"",
   });
 
+  const api = useMemo(() => new loginApi(), []);
   
 
   const HandleInput = (e) => {
@@ -33,7 +35,7 @@ function Login() {
     // console.log(formValue);
   }
   
-  const handleSubmit=(e)=>{
+  const handleSubmit=async (e)=>{
     e.preventDefault();
     console.log(userInfo);
     flag = 1;
@@ -43,7 +45,15 @@ function Login() {
     }
 
     if(!status)
-      console.log("Form validation failed,it is not submitted");
+      return console.log("Form validation failed,it is not submitted");
+
+
+      const response = await api.ReadData(userInfo)
+    
+      if(response){
+        console.log(response);
+        // console.log({...userInfo,id:response.id});
+      }
 
     
   }

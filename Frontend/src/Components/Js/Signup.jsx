@@ -4,16 +4,17 @@ import "../Css/login.css"
 import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 // import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
+import loginApi from '../../Apis/Usersapi';
 
 let flag = 0;
 
 function Signup() {
-  // const {currentUser} =useAuth();
-  // console.log(currentUser);
+  //  const {currentUser,setUser} =useAuth();
+  //  console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
     email:"",
@@ -21,6 +22,8 @@ function Signup() {
     password:"",
     confirmPassword:""
   });
+
+  const api = useMemo(() => new loginApi(), []);
 
   const [errorMessage,setErrorMessage]=useState({
     name:"",
@@ -31,14 +34,23 @@ function Signup() {
   });
 
   
-
-  const handleSubmit=(e)=>{
+  const handleSubmit=async (e)=>{
     e.preventDefault();
     console.log(userInfo);
     flag = 1;
     let status = 1;
     for(let [name,value] of Object.entries(userInfo)){
-       status &= validateAuthInput(name,value,userInfo,setErrorMessage);
+      status &= validateAuthInput(name,value,userInfo,setErrorMessage);
+    }
+    
+    if(!status)
+     return console.log("Form validation failed,it is not submitted");
+
+    const response = await api.InsertData(userInfo)
+    
+    if(response){
+      console.log(response);
+      // console.log({...userInfo,id:response.id});
     }
 
     if(!status)
