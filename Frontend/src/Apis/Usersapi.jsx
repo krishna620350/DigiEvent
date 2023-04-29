@@ -17,13 +17,15 @@ export default class loginApi {
             },
             body: JSON.stringify(data)
         });
-        if(!response.ok) return null;
+       
+        if(!response.ok) throw new Error(await response.text());
         const responseData = await response.json();
         // console.log(JSON.stringify(responseData));
         return responseData;
       }
       catch(err){
-        console.log(err.message);
+        console.log(err);
+        return {error:err.message}
       }
     };
 
@@ -43,12 +45,14 @@ export default class loginApi {
           },
           body: JSON.stringify(data)
         });
-        if(!response.ok) return null;
+        
+        if(!response.ok) throw new Error(await response.text());
         const responseData = await response.json();
         return responseData;
       }
       catch(err){
         console.log(err.message);
+        return {error:err.message}
       }
       };
     }

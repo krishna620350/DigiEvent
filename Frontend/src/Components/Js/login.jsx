@@ -5,7 +5,7 @@ import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
 import { useMemo, useState } from 'react';
-// import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 import loginApi from '../../Apis/Usersapi';
@@ -13,7 +13,7 @@ import loginApi from '../../Apis/Usersapi';
 let flag = 0;
 
 function Login() {
-  // const {currentUser} =useAuth();
+   const {currentUser,setUser} =useAuth();
   // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     email:"",
@@ -22,6 +22,7 @@ function Login() {
   const [errorMessage,setErrorMessage]=useState({
     email:"",
     password:"",
+    responseMessage:""
   });
 
   const api = useMemo(() => new loginApi(), []);
@@ -30,6 +31,8 @@ function Login() {
   const HandleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
+    if(errorMessage.responseMessage)
+    setErrorMessage((prev)=>({...prev,responseMessage:""}));
     if(flag)
     validateAuthInput(name,value,userInfo,setErrorMessage);
     // console.log(formValue);
@@ -37,6 +40,7 @@ function Login() {
   
   const handleSubmit=async (e)=>{
     e.preventDefault();
+    setErrorMessage((prev)=>({...prev,responseMessage:""}));
     console.log(userInfo);
     flag = 1;
     let status = 1;
@@ -50,9 +54,12 @@ function Login() {
 
       const response = await api.ReadData(userInfo)
     
-      if(response){
-        console.log(response);
-        // console.log({...userInfo,id:response.id});
+      console.log(response);
+      if(response.error){
+        console.log("error while loggining in",response);
+        setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
+      }else{
+        setUser((user)=>({...user,currentUser:response.currentUser}))
       }
 
     
@@ -83,11 +90,13 @@ function Login() {
       
       </Card.Body>
       </Card>
+    <FormErrorMessage errorMessage={errorMessage.responseMessage}/>
       <Button variant="primary" type="submit" className='mb-5'>
         Submit
       </Button>
     </Form>
     </Container>
+
     </>
   );
 }
