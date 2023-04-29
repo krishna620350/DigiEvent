@@ -9,11 +9,13 @@ import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 import loginApi from '../../Apis/Usersapi';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 let flag = 0;
 
 function Login() {
    const {currentUser,setUser} =useAuth();
+   const navigate =useNavigate();
   // console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     email:"",
@@ -59,7 +61,8 @@ function Login() {
         console.log("error while loggining in",response);
         setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
       }else{
-        setUser((user)=>({...user,currentUser:response.currentUser}))
+        setUser((user)=>({...user,currentUser:response}))
+        return navigate("/")
       }
 
     

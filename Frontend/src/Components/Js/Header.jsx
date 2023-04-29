@@ -17,7 +17,7 @@ class Header extends React.Component {
                             <Link to='/event' className="button1">create event</Link>
                         </div>
                         <div className="ongoingContainer">
-                            <li ><a href="/" className="ongoing-events">Ongoing Events </a></li>
+                            <li ><a className="ongoing-events">Ongoing Events </a></li>
                         </div>
                     </ul>
                 </div>
