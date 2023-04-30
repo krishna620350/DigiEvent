@@ -9,12 +9,14 @@ import { useMemo, useState } from 'react';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 import loginApi from '../../Apis/Usersapi';
+import { useNavigate } from 'react-router-dom';
 
 
 let flag = 0;
 
 function Signup() {
    const {currentUser,setUser} =useAuth();
+   const navigate =useNavigate();
   //  console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
@@ -57,7 +59,8 @@ function Signup() {
       console.log("error while sigging up",response);
       setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
     }else{
-      setUser((user)=>({...user,currentUser:response.currentUser}))
+      setUser((user)=>({...user,currentUser:response}))
+      return navigate("/")
     }
    
   }
