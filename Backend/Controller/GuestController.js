@@ -8,20 +8,20 @@ import {
     arrayUnion
 } from "firebase/firestore";
 import FireStore from "../Config/Connection.js";
-import crypto from "crypto";
+import Validation from "../Validations/GuestValidation.js";
 
-export default class GuestController{
-    ReadData = async(req, res) => {
-        try{
+export default class GuestController {
+    ReadData = async (req, res) => {
+        try {
             const id = req.body.id;
             const results = [];
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
-                if(doc.id === id) results.push(doc.data());
+                if (doc.id === id) results.push(doc.data());
             });
             // console.log(results)
             res.status(200).json(results);
-        }catch(e){
+        } catch (e) {
             // console.log(e);
             res.status(404).json(e);
         }
@@ -38,7 +38,7 @@ export default class GuestController{
                 if (doc.id === id) {
                     // console.log(doc.data().Guests.length);
                     doc.data().Guests.forEach(item => {
-                        if (item.Ticket === TicketId && item.VendorId === Vid) { 
+                        if (item.Ticket === TicketId && item.VendorId === Vid) {
                             results.push(item);
                             // console.log(results.length);
                         }
@@ -53,13 +53,14 @@ export default class GuestController{
         }
     };
 
-    InsertData = async(req, res) => {
+    InsertData = async (req, res) => {
         // console.log(req.body);
         const result = [];
+        const errors = [];
+        let i = req.body.length - 1;
         try {
-            let i = req.body.length - 1;
             // console.log(i);
-            while(i >= 0) {
+            while (i >= 0) {
                 const id = req.body[i].id;
                 const document = {
                     GuestName: req.body[i].GuestName,
@@ -74,19 +75,28 @@ export default class GuestController{
                     Status: req.body[i].Status
                 }
                 // console.log(i)
-                await updateDoc(doc(FireStore, "Event", id), {
-                    Guests: arrayUnion(document)
-                })
-                    .then(() => {
-                        result.push({id : req.body[i].Ticket})
+                const validation = new Validation(document);
+                if (validation.valid) {
+                    await updateDoc(doc(FireStore, "Event", id), {
+                        Guests: arrayUnion(document)
                     })
-                    .catch(e => res.status(404).json(e));
+                        .then(() => {
+                            result.push({ id: req.body[i].Ticket })
+                        })
+                        .catch(e => res.status(404).json(e));
+                } else {
+                    errors.push({ error: validation.errors })
+                }
                 i--;
             }
-        } catch (e) { 
+        } catch (e) {
             res.status(500).json(e);
         } finally {
-            res.status(200).json(result);
+            if (errors.length > 0) {
+                res.status(422).json(errors);
+            } else {
+                res.status(200).json(result);
+            }
         }
     };
 

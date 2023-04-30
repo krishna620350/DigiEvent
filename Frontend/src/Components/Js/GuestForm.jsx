@@ -98,15 +98,29 @@ function GuestForm() {
     api.InsertDate(formValue).then(response => {
       // console.log(response);
       if (Array.isArray(response)) {
-        alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-
-        setToken(tickets)
-        // console.log(tickets)
-        toggleShow()
-
+        const hasError = response.every(obj => obj.hasOwnProperty('error'));
+        const hasId = response.every(obj => obj.hasOwnProperty('id'));
+        if (hasError) {
+          let str = '';
+          for (let i = (response.length - 1); i >= 0; i--) {
+            if (response[i].error) {
+              str += (`Guest ${response.length - i + 1} -- ${response[i].error}\n`);
+            }
+          }
+          alert(str);
+          setToken([]);
+        } else if (hasId) {
+          alert('You have successfully booked tickets');
+          const bookedTickets = response.map(obj => obj.id);
+          setToken(bookedTickets);
+          toggleShow();
+        } else {
+          alert('Unexpected response format');
+          setToken([]);
+        }
       } else {
-        alert("Your Tickets is not booked 😭😭😭😭😭😭")
-        setToken([])
+        alert('Unexpected response format');
+        setToken([]);
       }
 
 
