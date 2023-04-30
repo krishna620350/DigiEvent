@@ -4,14 +4,20 @@ import "../Css/login.css"
 import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
-import { useState } from 'react';
-// import { useAuth } from '../../context/AuthContext';
+import { useMemo, useState } from 'react';
+ import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
+import loginApi from '../../Apis/Usersapi';
+import { useNavigate } from 'react-router-dom';
+
+
+let flag = 0;
 
 function Signup() {
-  // const {currentUser} =useAuth();
-  // console.log(currentUser);
+   const {currentUser,setUser} =useAuth();
+   const navigate =useNavigate();
+  //  console.log(currentUser);
   const [userInfo,setUserInfo]=useState({
     name:"",
     email:"",
@@ -20,34 +26,52 @@ function Signup() {
     confirmPassword:""
   });
 
+  const api = useMemo(() => new loginApi(), []);
+
   const [errorMessage,setErrorMessage]=useState({
     name:"",
     email:"",
     visitorType:"",
     password:"",
-    confirmPassword:""
+    confirmPassword:"",
+    responseMessage:""
   });
 
   
-
-  const handleSubmit=(e)=>{
+  const handleSubmit=async (e)=>{
     e.preventDefault();
+    setErrorMessage((prev)=>({...prev,responseMessage:""}));
     console.log(userInfo);
+    flag = 1;
     let status = 1;
     for(let [name,value] of Object.entries(userInfo)){
-       status &= validateAuthInput(name,value,userInfo,setErrorMessage);
-    }
-
-    if(!status)
-      console.log("Form validation failed,it is not submitted");
-
+      status &= validateAuthInput(name,value,userInfo,setErrorMessage);
     }
     
+    if(!status)
+     return console.log("Form validation failed,it is not submitted");
+
+
+    const response = await api.InsertData(userInfo)
+    
+    console.log(response);
+    if(response.error){
+      console.log("error while sigging up",response);
+      setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
+    }else{
+      setUser((user)=>({...user,currentUser:response}))
+      return navigate("/")
+    }
+   
+  }
   
   const HandleInput = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
+    if(errorMessage.responseMessage)
+    setErrorMessage((prev)=>({...prev,responseMessage:""}));
     // console.log(formValue);
+    if(flag)
     validateAuthInput(name,value,userInfo,setErrorMessage);
 
 }
@@ -57,16 +81,20 @@ function Signup() {
       <Container >
       <Menu/>
       <p class="h1">Signup Form</p><hr />
-    <Form onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit}>
     <Card className="border border-info border-3  mb-3"> 
     <Card.Body>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Name</Form.Label>
         <Form.Control type="text" placeholder="Enter name" name="name" value={userInfo.name} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.name}/>
+
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" name="email" value={userInfo.email} onChange={HandleInput} />
+        <FormErrorMessage errorMessage={errorMessage.email}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -94,6 +122,8 @@ function Signup() {
            onChange={HandleInput}
           />
         </div>
+        <FormErrorMessage errorMessage={errorMessage.visitorType}/>
+
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -109,6 +139,7 @@ function Signup() {
      
       </Card.Body>
       </Card>
+    <FormErrorMessage errorMessage={errorMessage.responseMessage}/>
       <Button variant="primary" type="submit" className='mb-5'>
         Submit
       </Button>

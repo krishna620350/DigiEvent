@@ -1,8 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import '../Css/Navbar.css';
+import { useAuth } from '../../context/AuthContext';
 
 function Menu() {
   const navigate=useNavigate();
+  const {currentUser,setUser} =useAuth();
+
+  const handleLogout=()=>{
+    setUser((prev)=>({...prev,currentUser:null}));
+
+    //logic to call backend /logout route is currently missing
+  }
+
   return (
     <nav className='main-nav'>
       <label className='logo'>DigiEvent </label>
@@ -12,11 +21,17 @@ function Menu() {
         <div className='line'></div>
       </div>
       <ul>
-        <li><a href='/' className='active'>Home</a></li>
-        <li><a href='/'>About</a></li>
-        <li><a href='/'>Events</a></li>
-        <li><a href='/login' onClick={()=>navigate("/login")} className="login">Log in</a></li>
-        <li><a href='/signup' onClick={()=>navigate("/signup")} className="login">Sign up</a></li>
+        <li><a  onClick={()=>navigate("/")} className='active pointerHover'>Home</a></li>
+        <li><a >About</a></li>
+        <li><a >Events</a></li>
+        {currentUser?
+        <li><a onClick={handleLogout} className="pointerHover">Log out</a></li>
+        :
+        <>
+        <li><a onClick={()=>navigate("/login")} className="pointerHover">Log in</a></li>
+        <li><a onClick={()=>navigate("/signup")} className="pointerHover">Sign up</a></li>
+        </>
+        }
       </ul>
     </nav>
   );

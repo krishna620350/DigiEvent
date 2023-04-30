@@ -12,6 +12,38 @@ import EventApi from "../../Apis/EventApi";
 import data from "../../Json/State.json";
 import Footer from "./Footer";
 import Menu from './Navbar';
+function isValidHostName(hostName) {
+    const nameRegex = /^[A-Za-z ]+$/;
+    return nameRegex.test(hostName);
+}
+function isValidEventName(eventName) {
+    const nameRegex = /^[A-Za-z0-9 ]+$/;
+    return nameRegex.test(eventName);
+}
+function isValidPhoneNumber(phoneNumber) {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phoneNumber);
+}
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function isValidZip(zip) {
+    const zipRegex = /^[0-9]{6}$/;
+    return zipRegex.test(zip);
+}
+function isInvalid(value) {
+    if (!value) {
+      return true; 
+    }
+    return false; 
+}
+function isValidDateRange(startDate, endDate) {
+    return (new Date(startDate) <= new Date(endDate));
+}  
+function isValidTotalTicket(totalTicket) {
+    return (Number.isInteger(parseInt(totalTicket)) && parseInt(totalTicket) >= 1);
+}
 
 function EventForm() {
     const selectRef = useRef(null);
@@ -60,38 +92,38 @@ function EventForm() {
     return (
         <>
         <Container>
-            <Menu />
+        <Menu />
             <p class="h1">Event Form</p><hr />
             <Form method="POST" action="#" onSubmit={HandleSubmit}>
                 <Card className="border border-info border-3  mb-3">
                     <Card.Body>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="formGridEmail">
-                                <Form.Label>Host Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Host Name" name='HostName' value={formValue.HostName} onChange={HandleInput} />
+                                <Form.Label>Host Name<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="text" placeholder="Enter Host Name" name='HostName' value={formValue.HostName} onChange={HandleInput} required pattern="[A-Za-z0-9]+" className={isValidHostName(formValue.HostName) ? '' : 'is-invalid'}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridPassword">
-                                <Form.Label>Event Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Event Name" name='EventName' value={formValue.EventName} onChange={HandleInput} />
+                                <Form.Label>Event Name<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="text" placeholder="Enter Event Name" name='EventName' value={formValue.EventName} onChange={HandleInput} required pattern="[A-Za-z0-9]+"className={isValidEventName(formValue.EventName) ? '' : 'is-invalid'} />
                             </Form.Group>
                         </Row>
 
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="formGridEmail">
-                                <Form.Label>Host Email ID</Form.Label>
-                                <Form.Control type="email" placeholder="Enter Host Email ID" name='HostEmail' value={formValue.HostEmail} onChange={HandleInput} />
+                                <Form.Label>abc@example.com<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="email" placeholder="Enter Host Email ID" name='HostEmail' value={formValue.HostEmail} onChange={HandleInput} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required className={isValidEmail(formValue.HostEmail) ? '' : 'is-invalid'}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridPassword">
-                                <Form.Label>Host Phone Number</Form.Label>
-                                <Form.Control type="tel" placeholder="Enter Host Phone No." name='HostPhone' value={formValue.HostPhone} onChange={HandleInput} />
+                                <Form.Label>10 digit phone number<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="tel" placeholder="Enter Host Phone No." name='HostPhone' value={formValue.HostPhone} onChange={HandleInput} pattern="[0-9]{10}" required maxLength={10} className={isValidPhoneNumber(formValue.HostPhone) ? '' : 'is-invalid'} />
                             </Form.Group>
                         </Row>
 
                         <Form.Group className="mb-3" controlId="formGridAddress1">
-                            <Form.Label>Event Address</Form.Label>
-                            <Form.Control type="text" placeholder="1234 Main St" name='EventAddress' value={formValue.EventAddress} onChange={HandleInput} /><br></br>
+                            <Form.Label>Event Address<span style={{color: 'red'}}>*</span></Form.Label>
+                            <Form.Control type="text" placeholder="1234 Main St" name='EventAddress' value={formValue.EventAddress} onChange={HandleInput} required className={isInvalid(formValue.EventAddress) ? 'is-invalid' : ''}/><br></br>
                             <Form.Control type="text" placeholder="Apartment, studio, or floor" name='EventAddress_1' value={formValue.EventAddress_1} onChange={HandleInput} />
                         </Form.Group>
 
@@ -114,8 +146,8 @@ function EventForm() {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridZip">
-                                <Form.Label>Zip</Form.Label>
-                                <Form.Control name='Zip' value={formValue.Zip} onChange={HandleInput} />
+                                <Form.Label>PIN Code<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control name='Zip' value={formValue.Zip} placeholder="6 digit PIN Code" onChange={HandleInput}pattern="[1-9][0-9]{5}" required className={isValidZip(formValue.Zip) ? '' : 'is-invalid'} maxLength={6} />
                             </Form.Group>
                         </Row>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -125,19 +157,19 @@ function EventForm() {
 
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="formGridEmail">
-                                <Form.Label>Event Start Date</Form.Label>
-                                <Form.Control type="date" name='StartDate' value={formValue.StartDate} onChange={HandleInput} />
+                                <Form.Label>Event Start Date<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="date" name='StartDate' value={formValue.StartDate} onChange={HandleInput} min={new Date().toISOString().split('T')[0]} required className={isValidDateRange(formValue.StartDate, formValue.EndDate) ? '' : 'is-invalid'}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridPassword">
-                                <Form.Label>Event End Date</Form.Label>
-                                <Form.Control type="date" name='EndDate' value={formValue.EndDate} onChange={HandleInput} />
+                                <Form.Label>Event End Date<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control type="date" name='EndDate' value={formValue.EndDate} onChange={HandleInput} min={formValue.StartDate} required className={isValidDateRange(formValue.StartDate, formValue.EndDate) ? '' : 'is-invalid'}/>
                             </Form.Group>
                         </Row>
 
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Total Tickets</Form.Label>
-                            <Form.Control type="number" placeholder="Enter Host Name" name='TotalTicket' value={formValue.TotalTicket} onChange={HandleInput} />
+                            <Form.Label>Total Tickets<span style={{color: 'red'}}>*</span></Form.Label>
+                            <Form.Control type="number" placeholder="Enter Host Name" name='TotalTicket' value={formValue.TotalTicket} onChange={HandleInput} required min={1} className={isValidTotalTicket(formValue.TotalTicket) ? '' : 'is-invalid'}/>
                         </Form.Group>
                     </Card.Body>
                 </Card>
