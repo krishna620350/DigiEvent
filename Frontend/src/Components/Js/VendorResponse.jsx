@@ -79,8 +79,10 @@ function VendorResponse() {
                             </tr>
                         </thead>
                         <tbody>
+                            {console.log(data[1])}
                             {/* {console.log(data[0].Paticipants)} */}
                             {data[1].GID.map((item, index) => {
+                            
                                 const isGuestUpdated = Guest.length > 0 && Guest[0].Guests.some(guest => guest.Ticket === item.id && guest.Status === -1);
                                 // console.log(isGuestUpdated);
                                 return (
@@ -96,7 +98,7 @@ function VendorResponse() {
                                         </td>
                                         <td style={isGuestUpdated ? {} : { backgroundColor: '#98FB98' }}>
                                             {isGuestUpdated ? (
-                                                <Link to={`/guest/${id}/${vid}/${item.id}`} target='_blank'>
+                                                <Link to={`/updateguest/event/${id}/vendor/${vid}/guest/${item.id}`} target='_blank'>
                                                     <Button className='btn-danger'>
                                                         Update Ticket
                                                     </Button>

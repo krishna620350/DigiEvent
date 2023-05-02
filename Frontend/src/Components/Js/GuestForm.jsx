@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/esm/Badge';
 import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
-import { useParams } from "react-router-dom"; //useNavigate 
+import { useParams, useNavigate } from "react-router-dom"; //useNavigate 
 import QRCode from 'qrcode.react';
 import jsPDF from 'jspdf';
 // import autoTable from 'jspdf-autotable';
@@ -34,6 +34,7 @@ import {
 
 function GuestForm() {
   // const [name, setName] = useState("")
+  const navigate = new useNavigate();
   const [token, setToken] = useState([])
   const [centredModal, setCentredModal] = useState(false);
 
@@ -103,6 +104,7 @@ function GuestForm() {
         setToken(tickets)
         // console.log(tickets)
         toggleShow()
+        navigate(`/event/${id}/guest/download`)
 
       } else {
         alert("Your Tickets is not booked 😭😭😭😭😭😭")
@@ -275,61 +277,7 @@ function GuestForm() {
     <>
       {/* <Header /> */}
 
-      <MDBModal tabIndex='-1' show={centredModal} setShow={setCentredModal}>
-        <MDBModalDialog centered>
-          <MDBModalContent>
-            <MDBModalHeader className='d-flex justify-content-center'>
-              <MDBModalTitle className="text-primary d-flex justify-content-center" >Guest Details</MDBModalTitle>
-              <MDBBtn className='btn-close' color='white' onClick={toggleShow}></MDBBtn>
-            </MDBModalHeader>
-            <MDBModalBody className='d-flex justify-content-center'>
-
-              {/* {
-                token.map(t => (<QRCode value={`${t}`} size="150" id={t}/>))
-              } */}
-
-              {/* {[...formValue].map((x, i) =>
-                <p>{formValue[i].GuestName+"   "}</p>
-                )} 
-
-              <ol>
-              {
-                token.map(t => (<li style={{padding:10}}><QRCode value={`${t}`} size="150" className="qr" key={t}/></li>))
-              }
-              </ol>  */}
-
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {[...formValue].map((x, i) => (
-                  <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
-                    <div style={{ display: "flex", flexDirection: "column", marginRight: 20 }}>
-                      <p style={{ fontWeight: "bold", marginRight: 20, textDecoration: "underline" }}>Guest{` `}{i + 1}</p>
-                      <p style={{ fontWeight: "normal" }}><span style={{ fontWeight: "bold", paddingRight: 10 }}>Name:</span>{formValue[i].GuestName}</p>
-                      <p style={{ fontWeight: "normal" }}><span style={{ fontWeight: "bold", paddingRight: 10 }}>Contact:</span>{formValue[i].GuestPhone}</p>
-                    </div>
-                    {/* <div style={{ display: "flex", alignItems: "center" }}>
-                      <p style={{ marginRight: 10 }}>{formValue[i].GuestName}</p>
-                      <p>{formValue[i].Contact}</p>
-                    </div> */}
-                    <div style={{ display: "flex", flexDirection: " column", marginLeft: "auto", paddingTop: 20 }}><QRCode value={`${token[token.length - i - 1]}`} size="100" className="qr" key={token[i]} /></div>
-                  </div>
-                ))}
-              </div>
-
-
-
-
-
-            </MDBModalBody>
-            <MDBModalFooter className='d-flex justify-content-center'>
-              <MDBBtn color='secondary' onClick={toggleShow}>
-                Close
-              </MDBBtn>
-
-              <MDBBtn onClick={() => generatePDF(token)}  >Download</MDBBtn>
-            </MDBModalFooter>
-          </MDBModalContent>
-        </MDBModalDialog>
-      </MDBModal>
+      
 
       <Menu />
       <Container className='text-white mb-5'>

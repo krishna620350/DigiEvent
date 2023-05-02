@@ -32,7 +32,8 @@ function GuestForm() {
         GuestAddress_1: '',
         City: '',
         State: '',
-        Zip: ''
+        Zip: '',
+        Status: -1
     });
     const api = useMemo(() => new GuestApi(), []);
 
@@ -45,7 +46,7 @@ function GuestForm() {
     const HandleSubmit = (e) => {
         e.preventDefault();
         // console.log(formValue);
-        formValue.status = -1
+        // formValue.status = -1
         formValue.Vid = vid;
         formValue.TicketId = ticketid;
         api.UpdateData(formValue).then(response => {
@@ -96,7 +97,8 @@ function GuestForm() {
                                 </Row>
                             </Card.Body>
                         </Card>
-                        {data[0].Guests.map((key, item) => {
+                        {data[0].Guests.map((item, key) => {
+                            {console.log(item.TicketId)}
                             if (item.Ticket === ticketid && item.Status === -1) {
                                 return (
                                     <Form method='POST' action='/' onSubmit={HandleSubmit} key={key}>

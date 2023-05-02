@@ -11,6 +11,8 @@ import Vendor from '../Components/Js/Vendor';
 import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
 import Signup from '../Components/Js/Signup';
+import GuestDownload from '../Components/Js/GuestDownload';
+import GuestSearchVendor from '../Components/Js/GuestSearchVendor';
 
 class Router extends React.Component {
     render() {
@@ -37,7 +39,7 @@ class Router extends React.Component {
                             element={<Responsive />}
                             />
                         <Route 
-                            path="/guest/:id"
+                            path="/event/:id/guest"
                             element={<GuestForm />}
                         />
                         <Route
@@ -45,16 +47,24 @@ class Router extends React.Component {
                             element={<Guest />}
                         />
                         <Route 
-                            path="/vendor/:id"
+                            path="/event/:id/vendor"
                             element={<Vendor />}
                         />
                         <Route
-                            path="/vendor/:id/:vid"
+                            path="/event/:id/vendor/:vid"
                             element={<VendorResponse />}
                          />
                         <Route
-                            path="/guest/:id/:vid/:ticketid"
+                            path="/updateguest/event/:id/vendor/:vid/guest/:ticketid"
                             element={<UpdateGuest />}
+                        />
+                        <Route
+                            path="/event/:id/guest/download"
+                            element={<GuestDownload />}
+                        />
+                        <Route
+                            path="/event/:id/vendor/search"
+                            element={<GuestSearchVendor />}
                         />
                     </Routes>
                 </BrowserRouter>

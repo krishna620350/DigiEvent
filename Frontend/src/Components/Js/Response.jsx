@@ -17,6 +17,21 @@ import Footer from './Footer';
 import Menu from "./Navbar";
 
 function Responsive() {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleUploadClick = () => {
+    // TODO: Handle uploading the selected file
+    console.log('Selected file:', selectedFile);
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.addEventListener('load', () => {
+        localStorage.setItem('background', reader.result);
+    });
+  };
 
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -120,9 +135,13 @@ function Responsive() {
                 </Col>
                 <Col>
                   <Row>
-                    <Col><Link to={`/guest/${id}`}><Button variant="info">Add-Guest</Button></Link></Col>
-                    <Col><Link to={`/vendor/${id}`}><Button variant="warning">Vendor</Button></Link></Col>
+                    <Col><Link to={`/event/${id}/guest`}><Button variant="info">Add-Guest</Button></Link></Col>
+                    <Col><Link to={`/event/${id}/vendor`}><Button variant="warning">Vendor</Button></Link></Col>
                   </Row>
+                  {/* <Row>
+                    <Col><input type="file" onChange={handleFileChange} /></Col>
+                    <Col><Button onClick={handleUploadClick}>Upload Theme</Button></Col>
+                    </Row> */}
                 </Col>
               </Row>
             </span>

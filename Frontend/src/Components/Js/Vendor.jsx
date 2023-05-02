@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import Footer from './Footer';
 import Menu from './Navbar';
@@ -31,16 +31,20 @@ function GuestForm() {
         setFormVisible(true);
     }
 
-    const handleButtonSelection = () => { 
+    const handleButtonSelection = () => {
         setSelectVisible(true);
         setFormVisible(false);
-        api.ReadData('vendor').then((response) => { 
+        api.ReadData('vendor').then((response) => {
             setVendor(response);
         });
     }
 
+    const handleButtonSearch = () =>{
+        navigate(`/event/${id}/vendor/search`)
+    }
+
     useEffect(() => {
-        
+
     }, [vendor]);
     const [formValue, setFormValue] = useState({
         id: id,
@@ -64,29 +68,31 @@ function GuestForm() {
     const HandleSubmit = (e) => {
         e.preventDefault();
         formValue.status = -1
-        if (formValue.VendorEmail === '' && formValue.VendorPhone === '') {
-            api.UpdateData(formValue).then(response => {
-                // console.log(response);
-                if (response.id !== "") {
-                    alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                    navigate(`/vendor/${id}/${response.id}`);
-                } else {
-                    alert("Your Tickets is not booked 😭😭😭😭😭😭")
-                }
-            });
-            // console.log(formValue);
-        } else {
-            api.InsertDate(formValue).then(response => {
-                console.log(response);
-                if (response.id !== "") {
-                    alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-                    navigate(`/vendor/${id}/${response.id}`);
-                } else {
-                    alert("Your Tickets is not booked 😭😭😭😭😭😭")
-                }
-            });
-        }
+        api.InsertDate(formValue).then(response => {
+            console.log(response);
+            if (response && response.id) {
+                alert("You have successfully Appoint Vendor 🙏🙏🙏🙏🙏")
+                navigate(`/event/${id}/vendor/${response.id}`);
+            }else if (response && response.error) {
+                alert(`${response.error}`);
+            }else {
+                alert("Some error occur 😭😭😭😭😭😭")
+            }
+        });
         // console.log(formValue);
+    }
+
+    const UpdateVendor = (e) => { 
+        e.preventDefault();
+        api.UpdateData(formValue).then(response => {
+            // console.log(response);
+            if (response.id !== "") {
+                alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
+                navigate(`/vendor/${id}/${response.id}`);
+            } else {
+                alert("Your Tickets is not booked 😭😭😭😭😭😭")
+            }
+        });
     }
 
     const fetchData = useCallback(() => {
@@ -114,21 +120,22 @@ function GuestForm() {
                     <div>
                         <Card className="border border-info border-3  mb-3  ">
                             <Card.Body>
-                        <Row>
-                            <Col><b>Event Name:</b> {data[0].EventName}</Col>
-                            <Col><b>Host Name:</b> {data[0].HostName}</Col>
-                        </Row>
-                        <Row>
-                            <Col><b>Start Date:</b> {data[0].StartDate}</Col>
-                            <Col><b>End Date:</b> {data[0].EndDate}</Col>
-                        </Row>
-                        <Row>
-                            <Col><b>Host Contact:</b> {`${data[0].HostEmail} | ${data[0].HostPhone} | ${data[0].EventAddress} ${data[0].EventAddress_1}`}</Col>
+                                <Row>
+                                    <Col><b>Event Name:</b> {data[0].EventName}</Col>
+                                    <Col><b>Host Name:</b> {data[0].HostName}</Col>
+                                </Row>
+                                <Row>
+                                    <Col><b>Start Date:</b> {data[0].StartDate}</Col>
+                                    <Col><b>End Date:</b> {data[0].EndDate}</Col>
+                                </Row>
+                                <Row>
+                                    <Col><b>Host Contact:</b> {`${data[0].HostEmail} | ${data[0].HostPhone} | ${data[0].EventAddress} ${data[0].EventAddress_1}`}</Col>
                                 </Row>
                             </Card.Body>
                         </Card>
-                        <button type="button" className="btn btn-primary mb-3 me-3" onClick={ handleButtonForm }>Add Vendor</button>
+                        <button type="button" className="btn btn-primary mb-3 me-3" onClick={handleButtonForm}>Add Vendor</button>
                         <button type="button" className="btn btn-secondary mb-3" onClick={handleButtonSelection}>Appoint Vendor</button>
+                        <button type="button" className="btn btn-secondary mb-3" onClick={handleButtonSearch}>Search</button>
                         {formVisible && (
                             <Form method='POST' action='/' onSubmit={HandleSubmit}>
                                 <Card className="border border-success border-3">
@@ -199,7 +206,7 @@ function GuestForm() {
                         )}
                         <div>
                             {selectVisible && (
-                                <form method='POST' action='/' onSubmit={HandleSubmit}>
+                                <form method='POST' action='/' onSubmit={UpdateVendor}>
                                     <div className="form-group">
                                         <label htmlFor="vendorSelect">Select Vendor</label>
                                         <select className="form-control" id="vendorSelect" name='VendorName' value={formValue.VendorName} onChange={HandleInput} ref={selectRef}>
@@ -218,17 +225,18 @@ function GuestForm() {
                                     <Button variant="primary" type="submit">
                                         Submit
                                     </Button>
+                                    
                                 </form>
                             )}
                         </div>
-                    
-        
+
+
                     </div>
                 )}
             </Container>
             <Footer />
         </>
-                
+
     );
 }
 

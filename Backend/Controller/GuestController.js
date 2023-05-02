@@ -32,16 +32,26 @@ export default class GuestController{
             const id = req.body.id;
             const TicketId = req.body.TicketId;
             const Vid = req.body.Vid;
+            // console.log(TicketId)
+            // console.log(id)
             const results = [];
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
+                // console.log(doc.data())
                 if (doc.id === id) {
-                    // console.log(doc.data().Guests.length);
+                    // console.log(doc.data());
                     doc.data().Guests.forEach(item => {
-                        if (item.Ticket === TicketId && item.VendorId === Vid) { 
+                        // if (item.Ticket === TicketId && item.VendorId === Vid) { 
+                        //     results.push(item);
+                        //     // console.log(results.length);
+                        // console.log(item)
+                        // }
+                        if (item.Ticket === TicketId) { 
+                            
                             results.push(item);
-                            // console.log(results.length);
                         }
+                        //     // console.log(results.length);
+                        // }
                     })
                 }
             });
@@ -94,7 +104,7 @@ export default class GuestController{
         // console.log(req.body);
         const { id, Vid, TicketId } = req.body;
         try {
-            const { GuestName, GuestPhone, GuestEmail, GuestAddress, GuestAddress_1, City, State, Zip } = req.body;
+            const { GuestName, GuestPhone, GuestEmail, GuestAddress, GuestAddress_1, City, State, Zip,Status } = req.body;
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             for (const doc of querySnapshot.docs) {
                 if (doc.id === id) {
@@ -114,7 +124,7 @@ export default class GuestController{
                         City: City !== "" ? City : guests[guestIndex].City,
                         State: State !== "" ? State : guests[guestIndex].State,
                         Zip: Zip !== "" ? Zip : guests[guestIndex].Zip,
-                        Status: 0,
+                        Status: Status === -1? 0 : 1,
                     };
                     // console.log(updatedGuest)
                     const updatedGuests = [
