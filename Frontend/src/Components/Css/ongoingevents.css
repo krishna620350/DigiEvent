@@ -1,0 +1,29 @@
+.event-head{
+    text-align: center;
+    font-size: larger;
+    padding-top: 27px;
+}
+
+td{
+    font-size: large;
+}
+
+.container{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+}
+
+.eventname{
+    text-decoration: none;
+    color: black;
+}
+
+.eventname:hover{
+    color: rgb(59, 156, 111);
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+   }

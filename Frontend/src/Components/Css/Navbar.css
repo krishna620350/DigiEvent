@@ -1,4 +1,4 @@
-@import url("./Color.css");
+/* @import url("./Color.css");
 nav {
     display: flex;
     align-items: center;
@@ -100,4 +100,99 @@ nav .toggle-btn {
 
 .pointerHover{
     cursor: pointer;
-}
+} */
+
+.navbar {
+    background-color: #cfe8d5 !important;
+  }
+  
+  .navbar .navbar-nav .nav-item a {
+    padding: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: large;
+  }
+  
+  .navbar .navbar-nav .nav-item a:hover {
+    background-color: #a2bdaa;
+    border-radius: 4px;
+    transition: .4s;
+  }
+  
+  .navbar .navbar-nav .nav-item a:active {
+    background-color: #a2bdaa;
+    border-radius: 4px;
+  
+  }
+  
+ .login {
+    padding: 15px;
+    font-size: large !important;
+    text-decoration: none;
+    color:#494c4d;
+  }
+  
+  .navbar .navbar-nav .login:hover {
+    background-color: #9ab7a3; 
+    border-radius: 4px;
+    transition: .4s;
+    text-decoration: none;
+    color:#494c4d;
+    
+  }
+  
+  .navbar-brand {
+    padding-left: 20px;
+  
+  }
+  
+  .navLogo {
+    font-size: 35px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    color: #494c4d !important;
+  }
+  
+  .main-para{
+    margin-top: 70px;
+    padding: 30px;
+    font-size: 20px;
+  }
+  
+  .container{
+    margin-top:40px;
+  }
+  
+  .card{
+    padding: 20px;
+    
+  }
+  
+  .card-title{
+    text-align: center;
+    font-size: 50px;
+    cursor: pointer;
+  
+    
+  }
+  
+  .card-title a{
+  color: black;
+  text-decoration: none;
+  }
+  
+  
+  
+  
+  .card-title a:hover{
+     color: #546359;
+     transition: 0.4s;
+     text-shadow: #494c4d;
+  }
+  
+  .card-text{
+    padding: 20px;
+    font-size: larger;
+  }
+
+  .pointerHover{
+    cursor: pointer;}

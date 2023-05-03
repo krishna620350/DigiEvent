@@ -1,6 +1,85 @@
-@import url("./Color.css");
+/* @import url("./Color.css");
 
 .main-content {
+    /* color: #30e3da; */
+    /* text-align: center;
+    font-size: 10px;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+.create-event {
+    margin-left: 0;
+    text-align: center;
+    width: auto;
+    padding-top: 30px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 80px;
+    border-radius: 40px;
+    font-size: 23px;
+
+
+}
+
+.eventContainer {
+    margin-top: 70px;
+
+}
+
+.button1 {
+    text-decoration: none;
+    margin-top: 50px;
+    padding: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 30px;
+    border-radius: 40px;
+    border: 2px solid #fff;
+
+}
+
+.button1:hover {
+    background-color: #30e3da;
+    color: #1d2026;
+    transition: 0.5s;
+    border: none;
+}
+
+.ongoing-events {
+    text-decoration: none;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    padding: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 25px;
+    border-radius: 40px;
+    border: 2px solid #fff;
+
+}
+
+.ongoing-events:hover {
+    background-color: #30e3da;
+    color: #1d2026;
+    transition: 0.5s;
+    border: none;
+}
+
+
+.ongoingContainer {
+    margin-top: 130px;
+}
+
+.ongoing-events {
+    margin-top: 300px;
+}
+ */ 
+
+ .main-content {
     /* color: #30e3da; */
     text-align: center;
     font-size: 10px;
@@ -77,4 +156,5 @@
 .ongoing-events {
     margin-top: 300px;
 }
+
 

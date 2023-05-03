@@ -68,6 +68,22 @@ export default class EventController{
         } else {
             res.status(500).json({ error: "Unexpected error" });
         }
-    };
+    }
 
+    EventRead = async (req, res) => {
+        try {
+            const results = [];
+            const querySnapshot = await getDocs(collection(FireStore, "Event"));
+            querySnapshot.forEach((doc) => {
+                results.push(doc.data());
+                // console.log(doc.id, doc.data());
+            });
+            // console.log(results);
+            res.status(200).json(results);
+        } catch (e) {
+            // console.log(e);
+            res.status(404).json(e);
+        };
+
+    }
 }

@@ -33,5 +33,19 @@ export default class EventApi{
             console.log(error); // Handle errors here
         }
     }
+    EventGet = async () => { 
+        try {
+            const response = await fetch(`${this.url}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                }
+            });
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.log(error); // Handle errors here
+        }
+    }
 }
 

@@ -3,13 +3,14 @@ import Form from 'react-bootstrap/Form';
 import "../Css/login.css"
 import Menu from './Navbar';
 import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/esm/Container';
+// import Container from 'react-bootstrap/esm/Container';
 import { useMemo, useState } from 'react';
  import { useAuth } from '../../context/AuthContext';
 import validateAuthInput from '../../utils/validateAuthInput';
 import FormErrorMessage from './FormErrorMessage';
 import loginApi from '../../Apis/Usersapi';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 
 let flag = 0;
@@ -55,12 +56,13 @@ function Signup() {
     const response = await api.InsertData(userInfo)
     
     console.log(response);
+    console.log(response.name);
     if(response.error){
-      console.log("error while sigging up",response);
+      console.log("error while signing up",response);
       setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
     }else{
       setUser((user)=>({...user,currentUser:response}))
-      return navigate("/")
+      return navigate("/dashboard")
     }
    
   }
@@ -78,11 +80,11 @@ function Signup() {
 
   return (
     <>
-      <Container >
-      <Menu/>
-      <p class="h1">Signup Form</p><hr />
+      {/* <Container > */}
+      {/* <Menu/> */}
+      <p class="h1 text-center">Sign up to DigiEvent</p>
     <Form noValidate onSubmit={handleSubmit}>
-    <Card className="border border-info border-3  mb-3"> 
+    <Card className="border border-success border-2  mb-3 shadow-lg p-3 mb-5 bg-body rounded"> 
     <Card.Body>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Name</Form.Label>
@@ -140,11 +142,12 @@ function Signup() {
       </Card.Body>
       </Card>
     <FormErrorMessage errorMessage={errorMessage.responseMessage}/>
-      <Button variant="primary" type="submit" className='mb-5'>
+      <Button variant="primary" type="submit" className='sign-but mb-5'>
         Submit
       </Button>
     </Form>
-    </Container>
+    {/* </Container> */}
+    <Footer />
     </>
   );
 }
