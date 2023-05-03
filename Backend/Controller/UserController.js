@@ -60,7 +60,7 @@ export default class UserController {
 
       const docRef = await addDoc(collection(FireStore, "users"), document);
 
-      res.status(201).json({ currentUser: { ...document, id: docRef.id } });
+      res.status(201).json({ ...document, id: docRef.id } );
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: e });

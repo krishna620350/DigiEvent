@@ -1,4 +1,4 @@
-@import url("./Color.css");
+/* @import url("./Color.css");
 footer {
     background-color: var(--main-color-l);
     height: auto;
@@ -6,6 +6,20 @@ footer {
     position: fixed;
     z-index: 9999;
     bottom: 0;
+}
+
+footer p {
+    text-align: center;
+} */
+@import url("./Color.css");
+footer {
+    /* background-color: var(--main-color-l); */
+    height: auto;
+    width: 100%;
+    /* position: fixed; */
+    /* z-index: 9999; */
+    bottom: 0;
+    font-size: small;
 }
 
 footer p {

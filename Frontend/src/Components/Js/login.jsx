@@ -62,18 +62,18 @@ function Login() {
         setErrorMessage((prev)=>({...prev,responseMessage:response.error}));
       }else{
         setUser((user)=>({...user,currentUser:response}))
-        return navigate("/")
+        return navigate("/dashboard")
       }
 
     
   }
   return (
     <>
-      <Container >
-      <Menu/>
-      <p class="h1">Login Form</p><hr />
+      {/* <Container > */}
+      {/* <Menu/> */}
+      <p class="h1 text-center">Sign in to DigiEvent</p>
     <Form noValidate onSubmit={handleSubmit}>
-    <Card className="border border-info border-3  mb-3"> 
+    <Card className="border border-success border-2  mb-3 shadow-lg p-3 mb-5 bg-body rounded">  
     <Card.Body>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -94,11 +94,11 @@ function Login() {
       </Card.Body>
       </Card>
     <FormErrorMessage errorMessage={errorMessage.responseMessage}/>
-      <Button variant="primary" type="submit" className='mb-5'>
+      <Button variant="primary" type="submit" className='login-but mb-5'>
         Submit
       </Button>
     </Form>
-    </Container>
+    {/* </Container> */}
 
     </>
   );
