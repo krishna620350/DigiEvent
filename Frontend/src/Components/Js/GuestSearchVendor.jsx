@@ -68,7 +68,7 @@ const GuestSearchVendor = () =>{
         City: `${data[0].GuestCity}`,
         State: `${data[0].GuestState}`,
         Zip: `${data[0].GuestZip}`,
-        Status : `${data[0].Status}`
+        Status : 0
     }
   
       
@@ -81,7 +81,9 @@ const GuestSearchVendor = () =>{
           // // console.log(1)
           // console.log(data)
           // console.log(formValue)
+          console.log("AA gya hu")
           alert("Welcome!!")
+
         }).catch(e =>{
           console.log(e)
         })

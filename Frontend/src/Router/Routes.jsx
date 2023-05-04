@@ -12,6 +12,7 @@ import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
 import Signup from '../Components/Js/Signup';
 import PrivateRoute from '../PrivateRoute';
+import GuestSearchVendor from '../Components/Js/GuestSearchVendor';
 
 const Router =()=>{
     
@@ -20,9 +21,10 @@ const Router =()=>{
         <Route
             path="/"
             element={
-            <PrivateRoute>
+            // <PrivateRoute>
             <App />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
         />
         <Route
             path="/login"
@@ -35,51 +37,66 @@ const Router =()=>{
         <Route 
             path="/event"
             element={
-                <PrivateRoute>
+            //     <PrivateRoute>
             <EventForm />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
         />
         <Route
             path="/event/:id"
             element={
-            <PrivateRoute>
+            // <PrivateRoute>
             <Responsive />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
             />
         <Route 
             path="/guest/:id"
             element={
-            <PrivateRoute>
+            // <PrivateRoute>
             <GuestForm />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
         />
         <Route
             path="/ticket/:id"
             element={
-            <PrivateRoute>
+            // <PrivateRoute>
             <Guest />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
         />
         <Route 
-            path="/vendor/:id"
+            path="/event/:id/vendor"
             element={
-                <PrivateRoute>
+            //     <PrivateRoute>
             <Vendor />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
         />
         <Route
-            path="/vendor/:id/:vid"
+            path="/event/:id/vendor/:vid"
             element={
-                <PrivateRoute>
+            //     <PrivateRoute>
             <VendorResponse />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
          />
         <Route
-            path="/guest/:id/:vid/:ticketid"
+            path="/updateguest/event/:id/vendor/:vid/guest/:ticketid"
             element={
-                <PrivateRoute>
+            //     <PrivateRoute>
             <UpdateGuest />
-            </PrivateRoute>}
+            // </PrivateRoute>
+            }
+        />
+         <Route
+            path="/event/:id/vendor/search"
+            element={
+            //     <PrivateRoute>
+            <GuestSearchVendor />
+            // </PrivateRoute>
+            }
         />
     </Routes>
 </BrowserRouter>

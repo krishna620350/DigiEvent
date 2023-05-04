@@ -51,7 +51,7 @@ export default class GuestApi {
         return responseData;
     }
     UpdateData = async (formValue) => {
-        // console.log(formValue);
+        console.log(formValue);
         const response = await fetch(`${this.url}/updateData/`, {
             method: 'PUT',
             headers: {
