@@ -96,7 +96,7 @@ function VendorResponse() {
                                         </td>
                                         <td style={isGuestUpdated ? {} : { backgroundColor: '#98FB98' }}>
                                             {isGuestUpdated ? (
-                                                <Link to={`/guest/${id}/${vid}/${item.id}`} target='_blank'>
+                                                <Link to={`/guest/${id}/${vid}/${item.id}`}>
                                                     <Button className='btn-danger'>
                                                         Update Ticket
                                                     </Button>
