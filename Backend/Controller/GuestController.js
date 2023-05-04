@@ -8,20 +8,20 @@ import {
     arrayUnion
 } from "firebase/firestore";
 import FireStore from "../Config/Connection.js";
-import crypto from "crypto";
+import Validation from "../Validations/GuestValidation.js";
 
-export default class GuestController{
-    ReadData = async(req, res) => {
-        try{
+export default class GuestController {
+    ReadData = async (req, res) => {
+        try {
             const id = req.body.id;
             const results = [];
             const querySnapshot = await getDocs(collection(FireStore, "Event"));
             querySnapshot.forEach((doc) => {
-                if(doc.id === id) results.push(doc.data());
+                if (doc.id === id) results.push(doc.data());
             });
             // console.log(results)
             res.status(200).json(results);
-        }catch(e){
+        } catch (e) {
             // console.log(e);
             res.status(404).json(e);
         }
@@ -49,6 +49,7 @@ export default class GuestController{
                         if (item.Ticket === TicketId) { 
                             
                             results.push(item);
+                            // console.log(results.length);
                         }
                         //     // console.log(results.length);
                         // }
@@ -63,13 +64,14 @@ export default class GuestController{
         }
     };
 
-    InsertData = async(req, res) => {
+    InsertData = async (req, res) => {
         // console.log(req.body);
         const result = [];
+        const errors = [];
+        let i = req.body.length - 1;
         try {
-            let i = req.body.length - 1;
             // console.log(i);
-            while(i >= 0) {
+            while (i >= 0) {
                 const id = req.body[i].id;
                 const document = {
                     GuestName: req.body[i].GuestName,
@@ -84,19 +86,28 @@ export default class GuestController{
                     Status: req.body[i].Status
                 }
                 // console.log(i)
-                await updateDoc(doc(FireStore, "Event", id), {
-                    Guests: arrayUnion(document)
-                })
-                    .then(() => {
-                        result.push({id : req.body[i].Ticket})
+                const validation = new Validation(document);
+                if (validation.valid) {
+                    await updateDoc(doc(FireStore, "Event", id), {
+                        Guests: arrayUnion(document)
                     })
-                    .catch(e => res.status(404).json(e));
+                        .then(() => {
+                            result.push({ id: req.body[i].Ticket })
+                        })
+                        .catch(e => res.status(404).json(e));
+                } else {
+                    errors.push({ error: validation.errors })
+                }
                 i--;
             }
-        } catch (e) { 
+        } catch (e) {
             res.status(500).json(e);
         } finally {
-            res.status(200).json(result);
+            if (errors.length > 0) {
+                res.status(422).json(errors);
+            } else {
+                res.status(200).json(result);
+            }
         }
     };
 
@@ -109,7 +120,12 @@ export default class GuestController{
             for (const doc of querySnapshot.docs) {
                 if (doc.id === id) {
                     const guests = doc.data().Guests;
-                    const guestIndex = guests.findIndex(guest => guest.Ticket === TicketId && guest.VendorId === Vid);
+                    const guestIndex = guests.findIndex(guest => 
+                        {
+                            console.log("guest vendor " + guest.VendorId + " " + "vendor "+  Vid);
+                            return guest.Ticket === TicketId 
+                        });
+                    console.log({guestIndex});
                     if (guestIndex === -1) {
                         throw new Error(`Guest with Ticket ID ${TicketId} and/or Vendor ID ${Vid} does not exist in event with ID ${id}.`);
                     }
@@ -126,19 +142,24 @@ export default class GuestController{
                         Zip: Zip !== "" ? Zip : guests[guestIndex].Zip,
                         Status: Status === -1? 0 : 1,
                     };
-                    // console.log(updatedGuest)
+                    console.log(updatedGuest)
                     const updatedGuests = [
                         ...guests.slice(0, guestIndex),
                         updatedGuest,
                         ...guests.slice(guestIndex + 1),
                     ];
                     // console.log(updatedGuests)
-                    await updateDoc(doc.ref, { Guests: updatedGuests });
+                    let resp = await updateDoc(doc.ref, { Guests: updatedGuests });
+                    console.log({resp});
+                    return resp;
+                    
                 }
             }
         } catch (e) {
-            res.status(500).json({ message: e.message });
-        } finally {
+            return res.status(500).json({ message: e.message });
+            console.log("here")
+        } 
+        finally {
             res.status(200).json({ id: Vid, TicketId: TicketId });
         }
     };

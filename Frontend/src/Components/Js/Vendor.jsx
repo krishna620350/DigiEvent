@@ -12,7 +12,21 @@ import Footer from './Footer';
 import Menu from './Navbar';
 import state from "../../Json/State.json";
 import VendorApi from '../../Apis/VendorApi';
-
+function isValidName(name) {
+    const nameRegex = /^[A-Za-z ]+$/;
+    return nameRegex.test(name);
+}
+function isValidPhoneNumber(phoneNumber) {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phoneNumber);
+}
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function isValidTotalTicket(totalTicket) {
+    return (Number.isInteger(parseInt(totalTicket)) && parseInt(totalTicket) >= 1);
+}
 function GuestForm() {
     const [data, setData] = useState([]);
 
@@ -141,24 +155,24 @@ function GuestForm() {
                                 <Card className="border border-success border-3">
                                     <Card.Body>
                                         <Row className="mb-3">
-                                            <Form.Group as={Col} controlId="formGridEmail">
-                                                <Form.Label>Vendor Name:</Form.Label>
-                                                <Form.Control type="text" placeholder="Enter Your Name" name="VendorName" value={formValue.VendorName} onChange={HandleInput} />
+                                        <Form.Group as={Col} controlId="formGridEmail">
+                                                <Form.Label>Vendor Name<span style={{color: 'red'}}>*</span></Form.Label>
+                                                <Form.Control type="text" placeholder="Enter Your Name" name="VendorName" value={formValue.VendorName} onChange={HandleInput} required pattern="[A-Za-z0-9]+" className={isValidName(formValue.VendorName) ? '' : 'is-invalid'} />
                                             </Form.Group>
 
                                             <Form.Group as={Col} controlId="formGridPassword">
-                                                <Form.Label>Vendor Phone Number</Form.Label>
-                                                <Form.Control type="tel" placeholder="Enter Your Phone Number" name="VendorPhone" value={formValue.VendorPhone} onChange={HandleInput} />
+                                                <Form.Label>Vendor Phone Number<span style={{color: 'red'}}>*</span></Form.Label>
+                                                <Form.Control type="tel" placeholder="Enter Your Phone Number" name="VendorPhone" value={formValue.VendorPhone} onChange={HandleInput} pattern="[0-9]{10}" required maxLength={10} className={isValidPhoneNumber(formValue.VendorPhone) ? '' : 'is-invalid'}/>
                                             </Form.Group>
                                         </Row>
                                         <Row className="mb-3">
                                             <Form.Group as={Col} controlId="formGridEmail">
-                                                <Form.Label>Vendor Email ID:</Form.Label>
-                                                <Form.Control type="email" placeholder="Enter Your Email" name="VendorEmail" value={formValue.VendorEmail} onChange={HandleInput} />
+                                                <Form.Label>Vendor Email ID<span style={{color: 'red'}}>*</span></Form.Label>
+                                                <Form.Control type="email" placeholder="Enter Your Email" name="VendorEmail" value={formValue.VendorEmail} onChange={HandleInput} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required className={isValidEmail(formValue.VendorEmail) ? '' : 'is-invalid'} />
                                             </Form.Group>
                                             <Form.Group as={Col} controlId="formGridEmail">
-                                                <Form.Label>Number of Tickets:</Form.Label>
-                                                <Form.Control type="number" placeholder="Enter your count" name="TicketCount" value={formValue.TicketCount} onChange={HandleInput} />
+                                                <Form.Label>Number of Tickets<span style={{color: 'red'}}>*</span></Form.Label>
+                                                <Form.Control type="number" placeholder="Enter your count" name="TicketCount" value={formValue.TicketCount} onChange={HandleInput} required min={1} className={isValidTotalTicket(formValue.TicketCount) ? '' : 'is-invalid'}/>
                                             </Form.Group>
                                         </Row>
 

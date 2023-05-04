@@ -1,107 +1,81 @@
+import bcrypt from "bcrypt";
+
 import {
-    collection,
-    getDocs,
-    addDoc,
-    doc,
-    updateDoc,
-    deleteDoc,
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import FireStore from "../Config/Connection.js";
 
-export default class UserController{
-    ReadData = async (req, res) => {
-        try{
-            const querySnapshot = await getDocs(collection(FireStore, "users"));
-            const results = [];
-            querySnapshot.forEach((doc) => {
-                if (data.email === email && data.password === password)
-                {
-                results.push({ id: doc.id, data: doc.data() });
-                }
-                else{
-                    alert('Invalid email');
-                }
-            });
-            res.status(200).send(results);
-        }catch(e){
-            res.status(500).send("Error adding document: ", e);
+export default class UserController {
+  ReadData = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    try {
+      const querySnapshot = await getDocs(collection(FireStore, "users"));
+
+      let user = null;
+
+      //code optimization is done when given email from user matches from DB
+      for (var i in querySnapshot.docs) {
+        const doc = querySnapshot.docs[i].data();
+        if (doc.email === email) {
+          user = doc;
+          break;
         }
+      }
+
+      if (user) {
+        //given password is matched against stored hashed password of the user
+
+        const passMatch = await bcrypt.compare(password, user.password);
+        if (passMatch) res.status(200).json(user);
+        else res.status(401).json("password is incorrect");
+      } else {
+        res.status(404).json("user is not registered.please signup");
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).json("Error adding document: ", e);
     }
+  };
 
-    InsertData = async(req, res) => {
-        const document = {
-            name: req.body.name,
-            email: req.body.email,
-            visitorType: req.body.visitorType,
-            password: req.body.password,
-            confirmPassword : req.body.confirmPassword
-        }
-        
-        try {
-            const docRef = await addDoc(collection(FireStore, "users"), document);
-        
-            res.status(201).json({ id: docRef.id });
-          } catch (e) {
-            res.status(500).json({ error: e });
-          }
+  InsertData = async (req, res) => {
+    const document = {
+      name: req.body.name,
+      email: req.body.email,
+      visitorType: req.body.visitorType,
+      password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
+    };
+
+    try {
+      //hashing password before storing it to DB
+      document.password = document.confirmPassword = await hashPassword(
+        document.password
+      );
+
+      const docRef = await addDoc(collection(FireStore, "users"), document);
+
+      res.status(201).json({ currentUser: { ...document, id: docRef.id } });
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: e });
     }
+  };
+}
 
-   // findRecord = async (name) => {
-       // try{
-         //   const querySnapshot = await getDocs(collection(FireStore, "users"));
-           // const result = [];
-            //querySnapshot.forEach((doc) => {
-              //  if(doc.data().name===name){
-               //     result.push(doc.id);
-                //}
-        //    });
-         //   return result;
-      //  }catch(e) {
-       //     console.error(e);
-      //  }
-  //  }
-    
-//     findUser = async (email, password) => {
-//     try {
-//       const querySnapshot = await getDocs(collection(FireStore, 'users'));
-//       let result = null;
-//       querySnapshot.forEach(doc => {
-//         const data = doc.data();
-//         if (data.email === email && data.password === password) {
-//           result = doc;
-//         }
-//       });
-//       return result;
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-  
-    // UpdateData = async (req, res) => {
-    //     const name = req.body.name;
-    //     const Uname = req.body.Uname;
-    //     // console.log(firstName,UfirstName);
-    //     try{
-    //         const result = await this.findRecord(name);
-    //         const update = doc(FireStore, "users", result[0]);
-    //         await updateDoc(update, {
-    //             name:Uname,
-    //         });
-    //         res.status(200).send(result);
-    //     }catch(e) {
-    //         res.status(500).json({ error: e });
-    //     }
-    // }
-
-    // DeleteData = async (req, res) => {
-    //     const name = req.body.firstName;
-    //     const result = await this.findRecord(name)
-    //     // console.log(result);
-    //     try{
-    //         const Delete = await deleteDoc(doc(FireStore, "users", result[0]));
-    //         res.status(200).send("record deleted successfully");
-    //     }catch(e){
-    //         res.status(404).send("record not found");
-    //     }
-    // }
+// utility function to get hashed password
+async function hashPassword(password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, 10, (err, res) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(res);
+    });
+  });
 }

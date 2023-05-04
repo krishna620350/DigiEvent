@@ -11,64 +11,78 @@ import Vendor from '../Components/Js/Vendor';
 import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
 import Signup from '../Components/Js/Signup';
-import GuestDownload from '../Components/Js/GuestDownload';
-import GuestSearchVendor from '../Components/Js/GuestSearchVendor';
+import PrivateRoute from '../PrivateRoute';
 
-class Router extends React.Component {
-    render() {
-        return <BrowserRouter>
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={<App />}
-                        />
-                        <Route
-                            path="/login"
-                            element={<Login />}
-                        />
-                        <Route
-                            path="/signup"
-                            element={<Signup />}
-                        />
-                        <Route 
-                            path="/event"
-                            element={<EventForm />}
-                        />
-                        <Route
-                            path="/event/:id"
-                            element={<Responsive />}
-                            />
-                        <Route 
-                            path="/event/:id/guest"
-                            element={<GuestForm />}
-                        />
-                        <Route
-                            path="/ticket/:id"
-                            element={<Guest />}
-                        />
-                        <Route 
-                            path="/event/:id/vendor"
-                            element={<Vendor />}
-                        />
-                        <Route
-                            path="/event/:id/vendor/:vid"
-                            element={<VendorResponse />}
-                         />
-                        <Route
-                            path="/updateguest/event/:id/vendor/:vid/guest/:ticketid"
-                            element={<UpdateGuest />}
-                        />
-                        <Route
-                            path="/event/:id/guest/download"
-                            element={<GuestDownload />}
-                        />
-                        <Route
-                            path="/event/:id/vendor/search"
-                            element={<GuestSearchVendor />}
-                        />
-                    </Routes>
-                </BrowserRouter>
-    }
+const Router =()=>{
+    
+    return <BrowserRouter>
+    <Routes>
+        <Route
+            path="/"
+            element={
+            <PrivateRoute>
+            <App />
+            </PrivateRoute>}
+        />
+        <Route
+            path="/login"
+            element={<Login />}
+        />
+        <Route
+            path="/signup"
+            element={<Signup />}
+        />
+        <Route 
+            path="/event"
+            element={
+                <PrivateRoute>
+            <EventForm />
+            </PrivateRoute>}
+        />
+        <Route
+            path="/event/:id"
+            element={
+            <PrivateRoute>
+            <Responsive />
+            </PrivateRoute>}
+            />
+        <Route 
+            path="/guest/:id"
+            element={
+            <PrivateRoute>
+            <GuestForm />
+            </PrivateRoute>}
+        />
+        <Route
+            path="/ticket/:id"
+            element={
+            <PrivateRoute>
+            <Guest />
+            </PrivateRoute>}
+        />
+        <Route 
+            path="/vendor/:id"
+            element={
+                <PrivateRoute>
+            <Vendor />
+            </PrivateRoute>}
+        />
+        <Route
+            path="/vendor/:id/:vid"
+            element={
+                <PrivateRoute>
+            <VendorResponse />
+            </PrivateRoute>}
+         />
+        <Route
+            path="/guest/:id/:vid/:ticketid"
+            element={
+                <PrivateRoute>
+            <UpdateGuest />
+            </PrivateRoute>}
+        />
+    </Routes>
+</BrowserRouter>
 }
 
 export default Router;

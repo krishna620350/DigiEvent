@@ -31,7 +31,18 @@ import {
   MDBModalFooter,
 } from 'mdb-react-ui-kit';
 // import { direction } from 'html2canvas/dist/types/css/property-descriptors/direction';
-
+function isValidguestName(guestName) {
+  const nameRegex = /^[A-Za-z ]+$/;
+  return nameRegex.test(guestName);
+}
+function isValidguestPhone(guestPhone) {
+  const phoneRegex = /^[0-9]{10}$/;
+  return phoneRegex.test(guestPhone);
+}
+function isValidguestEmail(guestEmail) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(guestEmail);
+}
 function GuestForm() {
   // const [name, setName] = useState("")
   const navigate = new useNavigate();
@@ -99,16 +110,30 @@ function GuestForm() {
     api.InsertDate(formValue).then(response => {
       // console.log(response);
       if (Array.isArray(response)) {
-        alert("You have successfully Book a Tickets 🙏🙏🙏🙏🙏")
-
-        setToken(tickets)
-        // console.log(tickets)
-        toggleShow()
-        navigate(`/event/${id}/guest/download`)
+        const hasError = response.every(obj => obj.hasOwnProperty('error'));
+        const hasId = response.every(obj => obj.hasOwnProperty('id'));
+        if (hasError) {
+          let str = '';
+          for (let i = (response.length - 1); i >= 0; i--) {
+            if (response[i].error) {
+              str += (`Guest ${response.length - i + 1} -- ${response[i].error}\n`);
+            }
+          }
+          alert(str);
+          setToken([]);
+        } else if (hasId) {
+          alert('You have successfully booked tickets');
+          const bookedTickets = response.map(obj => obj.id);
+          setToken(bookedTickets);
+          toggleShow();
+        } else {
+          alert('Unexpected response format');
+          setToken([]);
+        }        navigate(`/event/${id}/guest/download`)
 
       } else {
-        alert("Your Tickets is not booked 😭😭😭😭😭😭")
-        setToken([])
+        alert('Unexpected response format');
+        setToken([]);
       }
 
 
@@ -308,20 +333,19 @@ function GuestForm() {
                   <Card.Body>
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Guest Name:</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Your Name" name="GuestName" value={input.name} onChange={event => HandleInput(index, event)} />
-
+                        <Form.Label>Guest Name<span style={{color: 'red'}}>*</span></Form.Label>
+                        <Form.Control type="text" placeholder="Enter Your Name" name="GuestName" value={input.GuestName} onChange={event => HandleInput(index, event)} required pattern="[A-Za-z0-9]+" className={isValidguestName(input.GuestName) ? '' : 'is-invalid'} />
                       </Form.Group>
 
                       <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Guest Phone Number</Form.Label>
-                        <Form.Control type="tel" placeholder="Enter Your Phone Number" name="GuestPhone" value={input.GuestPhone} onChange={event => HandleInput(index, event)} />
+                        <Form.Label>Guest Phone Number<span style={{color: 'red'}}>*</span></Form.Label>
+                        <Form.Control type="tel" placeholder="Enter Your Phone Number" name="GuestPhone" value={input.GuestPhone} onChange={event => HandleInput(index, event)} required pattern="[0-9]{10}"  maxLength={10} className={isValidguestPhone(input.GuestPhone) ? '' : 'is-invalid'}  />
                       </Form.Group>
                     </Row>
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Guest Email ID:</Form.Label>
-                        <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={input.GuestEmail} onChange={event => HandleInput(index, event)} />
+                        <Form.Label>Guest Email ID<span style={{color: 'red'}}>*</span></Form.Label>
+                        <Form.Control type="email" placeholder="Enter Your Email" name="GuestEmail" value={input.GuestEmail} onChange={event => HandleInput(index, event)} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required className={isValidguestEmail(input.GuestEmail) ? '' : 'is-invalid'}/>
                       </Form.Group>
                     </Row>
 
