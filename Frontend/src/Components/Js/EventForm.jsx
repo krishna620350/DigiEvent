@@ -40,9 +40,13 @@ function isInvalid(value) {
     }
     return false; 
 }
-function isValidDateRange(startDate, endDate) {
-    return (new Date(startDate) <= new Date(endDate));
-}  
+function isValidStartDate(startDate) {
+    return (new Date(startDate) >= new Date());
+}
+function isValidEndDate(startDate, endDate) {
+    return (new Date(endDate) >= new Date(startDate));
+}
+    
 function isValidTotalTicket(totalTicket) {
     return (Number.isInteger(parseInt(totalTicket)) && parseInt(totalTicket) >= 1);
 }
@@ -113,12 +117,12 @@ function EventForm() {
 
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="formGridEmail">
-                                <Form.Label>abc@example.com<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Label className='event-det'>Host Email<span style={{color: 'red'}}>*</span></Form.Label>
                                 <Form.Control type="email" placeholder="Enter Host Email ID" name='HostEmail' value={formValue.HostEmail} onChange={HandleInput} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required className={isValidEmail(formValue.HostEmail) ? '' : 'is-invalid'}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridPassword">
-                                <Form.Label>10 digit phone number<span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Label className='event-det'>Host Phone Number<span style={{color: 'red'}}>*</span></Form.Label>
                                 <Form.Control type="tel" placeholder="Enter Host Phone No." name='HostPhone' value={formValue.HostPhone} onChange={HandleInput} pattern="[0-9]{10}" required maxLength={10} className={isValidPhoneNumber(formValue.HostPhone) ? '' : 'is-invalid'} />
                             </Form.Group>
                         </Row>
@@ -158,14 +162,15 @@ function EventForm() {
                         </Form.Group>
 
                         <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridEmail">
+                        <Form.Group as={Col} controlId="formGridEmail">
                                 <Form.Label className='event-det'>Event Start Date<span style={{color: 'red'}}>*</span></Form.Label>
-                                <Form.Control  type="date" name='StartDate' value={formValue.StartDate} onChange={HandleInput} min={new Date().toISOString().split('T')[0]} required className={isValidDateRange(formValue.StartDate, formValue.EndDate) ? '' : 'is-invalid'}/>
-                            </Form.Group>
+                                <Form.Control type="date" name='StartDate' value={formValue.StartDate} onChange={HandleInput} min={new Date().toISOString().split('T')[0]} required className={isValidStartDate(formValue.StartDate) ? '' : 'is-invalid'} />
+                        </Form.Group>
+
 
                             <Form.Group as={Col} controlId="formGridPassword">
                                 <Form.Label className='event-det'>Event End Date<span style={{color: 'red'}}>*</span></Form.Label>
-                                <Form.Control type="date" name='EndDate' value={formValue.EndDate} onChange={HandleInput} min={formValue.StartDate} required className={isValidDateRange(formValue.StartDate, formValue.EndDate) ? '' : 'is-invalid'}/>
+                                <Form.Control type="date" name='EndDate' value={formValue.EndDate} onChange={HandleInput} min={formValue.StartDate} required className={isValidEndDate(formValue.StartDate, formValue.EndDate) ? '' : 'is-invalid'}/>
                             </Form.Group>
                         </Row>
 
