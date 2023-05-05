@@ -58,42 +58,42 @@ const validateAuthInput = (name, value, formInfo, setErrorMessage) => {
     }
   }
 
-  if (name === "visitorType") {
-    if (value === "") {
-      setErrorMessage((prev) => ({
-        ...prev,
-        [name]: "Please select visitor type",
-      }));
-      flag &= 0;
-    } else {
-      setErrorMessage((prev) => ({ ...prev, [name]: "" }));
-    }
-  }
+  // if (name === "visitorType") {
+  //   if (value === "") {
+  //     setErrorMessage((prev) => ({
+  //       ...prev,
+  //       [name]: "Please select visitor type",
+  //     }));
+  //     flag &= 0;
+  //   } else {
+  //     setErrorMessage((prev) => ({ ...prev, [name]: "" }));
+  //   }
+  // }
 
-  if (name === "name") {
-    if (value === "") {
-      setErrorMessage((prev) => ({
-        ...prev,
-        [name]: "Please provide your good name",
-      }));
-      flag &= 0;
-    } else {
-      setErrorMessage((prev) => ({ ...prev, [name]: "" }));
-    }
-  }
+  // if (name === "name") {
+  //   if (value === "") {
+  //     setErrorMessage((prev) => ({
+  //       ...prev,
+  //       [name]: "Please provide your good name",
+  //     }));
+  //     flag &= 0;
+  //   } else {
+  //     setErrorMessage((prev) => ({ ...prev, [name]: "" }));
+  //   }
+  // }
 
-  if (name === "email") {
-    let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,10})+$/;
-    if (!value.match(mailformat)) {
-      setErrorMessage((prev) => ({
-        ...prev,
-        [name]: "Please provide valid email",
-      }));
-      flag &= 0;
-    } else {
-      setErrorMessage((prev) => ({ ...prev, [name]: "" }));
-    }
-  }
+  // if (name === "email") {
+  //   let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,10})+$/;
+  //   if (!value.match(mailformat)) {
+  //     setErrorMessage((prev) => ({
+  //       ...prev,
+  //       [name]: "Please provide valid email",
+  //     }));
+  //     flag &= 0;
+  //   } else {
+  //     setErrorMessage((prev) => ({ ...prev, [name]: "" }));
+  //   }
+  // }
   return flag;
 };
 

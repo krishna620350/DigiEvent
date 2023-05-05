@@ -13,5 +13,6 @@ EventRouter.post(`${url}+/addData`, Controller.InsertData);
 // EventRouter.put(`${url}+/updateData`, Controller.UpdateData);
 
 // EventRouter.delete(`${url}+/deleteData`, Controller.DeleteData);
+EventRouter.get(`${url}`, Controller.EventRead);
 
 export default EventRouter;

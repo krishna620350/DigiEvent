@@ -3,12 +3,8 @@ import URL from "../Json/Url.json";
 
 const AuthContext = React.createContext();
 
-function useAuth() {
-  return useContext(AuthContext);
-}
-
 function AuthProvider({ children }) {
-  const [user, setUser] = useState({ currentUser: null });
+  const [user, setUser] = useState(null);
   useEffect(() => {
     async function getAccessToken() {
       let res = await fetch(`${URL.APIURL}/auth/refresh`, {
@@ -16,17 +12,18 @@ function AuthProvider({ children }) {
       });
       if (!res.ok) return;
       const { currentUser } = await res.json();
-      if (currentUser) setUser((prev) => ({ ...prev, currentUser }));
+      if (currentUser) setUser(currentUser)
     }
+    console.log({user})
     getAccessToken();
   }, []);
 
   const value = {
-    ...user,
+    user,
     setUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export { useAuth, AuthProvider };
+export { AuthContext, AuthProvider };

@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
-import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
 
 import App from '../Components/App';
 import Login from '../Components/Js/login';
@@ -12,7 +12,12 @@ import VendorResponse from '../Components/Js/VendorResponse';
 import UpdateGuest from '../Components/Js/UpdateGuest';
 import Signup from '../Components/Js/Signup';
 import PrivateRoute from '../PrivateRoute';
-import GuestSearchVendor from '../Components/Js/GuestSearchVendor';
+import AcceptGuest from '../Components/Js/AcceptGuest';
+import Header from "../Components/Js/Header";
+import Events from "../Components/Js/Events"
+import GuestDownload from "../Components/Js/GuestDownload"
+import { useAuth } from "../context/AuthContext";
+
 
 const Router =()=>{
     
@@ -26,13 +31,22 @@ const Router =()=>{
             // </PrivateRoute>
             }
         />
-        <Route
-            path="/login"
-            element={<Login />}
-        />
+        <Route path="/dashboard" element={<Header />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/eventlist" element={<Events />} />
         <Route
             path="/signup"
             element={<Signup />}
+        />
+        <Route
+            path="/acceptguest"
+            element={
+            //     <PrivateRoute>
+            <AcceptGuest />
+            // </PrivateRoute>
+            }
         />
         <Route 
             path="/event"
@@ -51,7 +65,7 @@ const Router =()=>{
             }
             />
         <Route 
-            path="/guest/:id"
+            path="/event/:id/guest"
             element={
             // <PrivateRoute>
             <GuestForm />
@@ -74,6 +88,15 @@ const Router =()=>{
             // </PrivateRoute>
             }
         />
+        <Route 
+            path="/event/:id/guest/download"
+            element={
+            // <PrivateRoute>
+            <GuestDownload />
+            // </PrivateRoute>
+            }
+        />
+         
         <Route
             path="/event/:id/vendor/:vid"
             element={
@@ -90,16 +113,11 @@ const Router =()=>{
             // </PrivateRoute>
             }
         />
-         <Route
-            path="/event/:id/vendor/search"
-            element={
-            //     <PrivateRoute>
-            <GuestSearchVendor />
-            // </PrivateRoute>
-            }
-        />
-    </Routes>
-</BrowserRouter>
-}
+      </Routes>
+    </BrowserRouter>
+  
+};
 
 export default Router;
+
+

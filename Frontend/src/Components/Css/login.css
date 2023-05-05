@@ -5,9 +5,76 @@
     color: red;
     padding: 5px;
 }
+
+/*Login page*/
+
 .h1{
-    color:#00c3ff;
-    ;
-    font-family: 'Dongle', sans-serif;
-    font-size: 3.8rem;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 30px;
+    padding-top: 60px;
+
+}
+.form-control{
+    border-width: 1px;
+}
+
+.form-control:focus{
+    box-shadow: none;
+    border: 1px solid #6bbf95;
+}
+form{
+    padding: 30px 400px;
+}
+
+
+.login-but{
+    margin-left: 200px;
+    background-color: #6bbf95;
+    border: none;
+}
+
+.login-but:hover{
+    background-color: #62a181;
+}
+
+/*sign up page*/ 
+
+.sign-up{
+    padding:25px 350px;
+}
+
+.sign-but{
+    background-color: #6bbf95;
+    border: none;
+    margin-left: 200px;
+
+}
+
+.sign-but:hover{
+    background-color: #62a181;
+}
+
+/*event page*/
+
+.create-event{
+    padding: 30px 100px;
+    
+}
+
+
+.event-det{
+    font-size: 17px;
+}
+
+.ce-but{
+    background-color: #6bbf95;
+    border: none;
+    margin-left: 0px;
+
+}
+
+.ce-but:hover{
+    background-color: #62a181; 
 }

@@ -8,7 +8,7 @@ import state from "../../Json/State.json";
 import GuestApi from '../../Apis/GuestApi';
 import Footer from './Footer';
 
-const GuestSearchVendor = () =>{
+const AcceptGuest = () =>{
     const [guestid, setguestid] = useState("");
     const [eventid, seteventid] = useState("");
     const [vendorid, setvendorid] = useState("");
@@ -102,6 +102,7 @@ const GuestSearchVendor = () =>{
 
     return(
         <>
+        <Menu/>
         <div className="container mt-3">
       <Form onSubmit={handleSearch}>
         <Form.Group>
@@ -162,10 +163,10 @@ const GuestSearchVendor = () =>{
       )}
     </div>
   
-        
+        <Footer/>
         </>
     )
 
 }
 
-export default GuestSearchVendor;
+export default AcceptGuest;
